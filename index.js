@@ -3,7 +3,7 @@ const { Client, Intents } = require('discord.js');
 require('dotenv').config();
 
 // read in value of discord bot token from the .env file
-const TOKEN = process.env.TOKEN;
+const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
 
 // Create a new client instance
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
@@ -14,9 +14,9 @@ client.once('ready', () => {
 });
 
 // Login to server with your client's token, logout subsequently
-client.login(TOKEN);
+client.login(DISCORD_BOT_TOKEN);
 
 // logout of server after timeout
 setTimeout(function() {
-	client.destroy(TOKEN);
+	client.destroy(DISCORD_BOT_TOKEN);
 }, 10000);
