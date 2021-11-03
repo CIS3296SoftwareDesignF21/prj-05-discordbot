@@ -1,0 +1,19 @@
+{
+  "name": "prj-05-discordbot",
+  "version": "0.0.1",
+  "description": "A Canvas Bot for Discord",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CIS3296SoftwareDesignF21/prj-05-discordbot.git"
+  },
+  "author": "Aaron Scofield, Yuri Yakymiv, Jacky Chen He",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CIS3296SoftwareDesignF21/prj-05-discordbot/issues"
+  },
+  "homepage": "https://github.com/CIS3296SoftwareDesignF21/prj-05-discordbot#readme"
+}
