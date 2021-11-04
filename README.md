@@ -21,12 +21,11 @@ Three Personas:
 # How to Run
 1. Clone the repository to your computer
 2. Move into the directory of the project
-3. Create a file in the directory called “.env” with the following content format:
-4. “TOKEN=INSERT DISCORD BOT TOKEN HERE”
-5. Instructions to create a bot and get a token can be found here
-6. run ```npm install``` to install node dependencies
-7. run ```npm install -g nodemon``` to install node dev. Dependencies
-8. run ```node .``` or ```node index.js``` to start the bot
+3. Create a file in the directory called “.env” with the format found in [.env.example](.env.example)
+4. Instructions to configure the Node app and run the bot are below:
+5. run ```npm install``` to install node dependencies
+6. run ```npm install -g nodemon``` to install node dev. Dependencies
+7. run ```node .``` or ```node index.js``` to start the bot
 
 # How to Install
 Prerequisite: Node Package Manager (NPM)
