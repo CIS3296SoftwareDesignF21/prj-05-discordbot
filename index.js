@@ -16,7 +16,21 @@ client.once('ready', () => {
 // Login to server with your client's token, logout subsequently
 client.login(DISCORD_BOT_TOKEN);
 
+client.on('interactionCreate', async interaction => {
+	if (!interaction.isCommand()) return;
+
+	const { commandName } = interaction;
+
+	if (commandName === 'hello') {
+		await interaction.reply('Hello World!');
+	}
+	if (commandName === 'server') {
+		await interaction.reply(`Server name: ${interaction.guild.name}\nTotal members: ${interaction.guild.memberCount}`);
+	}
+});
+
 // logout of server after timeout
-setTimeout(function() {
+/* setTimeout(function() {
+	console.log('destroyed');
 	client.destroy(DISCORD_BOT_TOKEN);
-}, 10000);
+}, 10000); */
