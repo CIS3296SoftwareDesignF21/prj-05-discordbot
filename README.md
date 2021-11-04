@@ -5,6 +5,9 @@ Short Description of Project:
 Link to Original Project Proposal:
 - https://github.com/CIS3296SoftwareDesignF21/feedback-on-proposals-section-005-m-w-3-30pm/issues/4
 
+Link to Trello Board:
+- https://trello.com/b/pkIZaP5j/project-management-board
+
 Vision Statement: 
 - For college students who utilize Discord servers for their college classes and whose colleges utilize Canvas, the Canvas Discord Bot is a Discord bot that facilitates communication between the Discord server and the corresponding college class the server is centered around. Unlike the previous solution, which required users to go back and forth between the Discord and Canvas applications, users of the Canvas Discord Bot can use simple commands within their Discord servers to pull information about their classes from Canvas without leaving the application. 
 
