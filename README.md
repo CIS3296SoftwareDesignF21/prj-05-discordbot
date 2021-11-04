@@ -16,7 +16,7 @@ Three Personas:
 
 2. Spongebob is a freshman student at Harvard University who specializes in CS. He uses discord primarily for classes and gaming. He would use discord whenever he is on his computer, and knows every feature Discord provides. He is familiar with discord bots and maintaining multiple servers. He would be interested in and would like to have Canvas features built inside Discord, so that he would not miss any important notifications from Canvas when he is gaming or chatting with his friends or in classes.
 
-3. 
+3. Professor Steven is computer science professor and in every single one of his classes he is a part of a discord server that allows him to communicate with his students. He spends a lot of time clarifying canvas assignments to his students and reminding them of due dates. Being a cs professor he is aware that there could be a product that makes his life a lot easier and takes out the human element in reminding students to complete their assignments and clarifying homeworks. When he discovers the discord bot he creates a server with the plugin every single time and it streamlines his communication with the students to such a point that he must only handle unexpected circumstances like unforseen abiguities.
 
 # How to Run
 1. Clone the repository to your computer
