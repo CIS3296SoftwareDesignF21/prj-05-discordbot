@@ -30,4 +30,5 @@ Prerequisite: Node Package Manager (NPM)
 
 Clone the repository to your computer, follow the instructions above. 
 
-
+# Week 1 Tasks
+[week1.md](week1.md)
