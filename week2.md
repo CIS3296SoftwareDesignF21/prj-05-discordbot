@@ -9,6 +9,8 @@ Tasks from Trello that each team member has accomplished this week (one coding t
 - Worked on README.md
 - Revised project vision and personas according to feedback
 - Worked on UML Diagram
+- Tried working on connecting to the Canvas API
+- Added two variables into exmaple.env
 
 #### Yuri Yakymiv
 - Worked on README.md
