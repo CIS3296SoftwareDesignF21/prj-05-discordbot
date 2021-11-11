@@ -34,3 +34,16 @@ Clone the repository to your computer, follow the instructions above.
 
 # Week 1 Tasks
 [week1.md](week1.md)
+
+# Week 2 Tasks
+[week2.md](week2.md)
+
+# UML Diagram
+
+![UML Diagram of the Application](./uml-diagram.png)
+
+A UML diagram was created to help those who are new to the project understand the architecture of the project. The diagram currently contains details on two classes, the environment variable file, and the discord.js library. Both [index.js](index.js) and [deploy-commands.js](deploy-commands.js) are linked to the .env file and recieve the various private keys for their use. [index.js](index.js) and [deploy-commands.js](deploy-commands.js) use functions and classes from the discord.js package, and these methods are listed in the diagram under discord.js. 
+
+[index.js](index.js) performs the initial connection to the Discord bot and logs it into the server using the client variable. Index.js also recognizes command inputs and provides the response to the server.
+
+[deploy-commands.js](deploy-commands.js) defines the commands the bot can recognize and performs the REST api connection to register the commands within the server the bot is connecting to. 
