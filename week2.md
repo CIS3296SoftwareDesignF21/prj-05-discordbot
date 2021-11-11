@@ -13,4 +13,7 @@ Tasks from Trello that each team member has accomplished this week (one coding t
 #### Yuri Yakymiv
 - Worked on README.md
 - Worked on UML Diagram
-- Implemented OAuth to connect to the Canvas API
+- Implemented OAuth to connect to the Canvas API // need client_id and client_secret
+- Added node-canvas-api package and learned functionality
+- Presented use cases in test.js
+- .env must be configured until canvas api
