@@ -1,12 +1,12 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 // Require the necessary discord.js classes
-const { Client, Intents } = require('discord.js');
+const { channel } = require('diagnostics_channel');
+const { Client, Intents, MessageEmbed, MessageAttachment, Message } = require('discord.js');
+const commands = require('./commands/commands');
 require('dotenv').config();
 
 // read in value of discord bot token from the .env file
 const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
-const CANVAS_API_DOMAIN = process.env.CANVAS_API_DOMAIN;
-const CANVAS_KEY = process.env.CANVAS_KEY;
 
 // Create a new client instance
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
@@ -28,31 +28,31 @@ client.on('interactionCreate', async interaction => {
 		await interaction.reply('Hello World!');
 	}
 	if (commandName === 'server') {
-		await interaction.reply(`Server name: ${interaction.guild.name}\nTotal members: ${interaction.guild.memberCount}`);
+		await interaction.reply({
+			content: `Server name: ${interaction.guild.name}\n`
+				+ `Total members: ${interaction.guild.memberCount}`,
+			ephemeral: true,
+		});
 	}
 	if (commandName === 'self') {
-		let body = '';
-		const https = require('https');
-		const options = {
-			hostname: CANVAS_API_DOMAIN,
-			port: 443,
-			path: '/api/v1/users/self',
-			method: 'GET',
-			headers: {
-				'Authorization': 'Bearer ' + CANVAS_KEY,
-			},
-		};
-
-		const req = https.request(options, res => {
-			res.on('data', d => {
-				body += d;
-			});
-		});
-		req.on('error', error => {
-			console.error(error);
-		});
-		req.end();
-		console.log(body);
+		commands.getSelf.then((response) => {
+			const js = JSON.parse(response)
+			console.log(js)
+			interaction.reply({
+				embeds: [new MessageEmbed()
+					.setColor('#0099ff')
+					.setTitle('User Info')
+					.setDescription('User ID => ' + js.id + '\n'
+						+ 'User Name => ' + js.name)
+					.setThumbnail(js.avatar_url)
+					.addField('Inline field title', 'Some value here', true)
+					.setTimestamp()],
+				ephemeral: true,
+			})
+		})
+			.catch(error => {
+				console.log('Error => ' + error);
+			})
 	}
 });
 
