@@ -1,6 +1,3 @@
-/* eslint-disable no-mixed-spaces-and-tabs */
-// Require the necessary discord.js classes
-const { channel } = require('diagnostics_channel');
 const { Client, Intents, MessageEmbed, MessageAttachment, Message } = require('discord.js');
 const commands = require('./commands/commands');
 require('dotenv').config();
@@ -45,13 +42,15 @@ client.on('interactionCreate', async interaction => {
 					.setDescription('User ID => ' + js.id + '\n'
 						+ 'User Name => ' + js.name)
 					.setThumbnail(js.avatar_url)
-					.addField('Inline field title', 'Some value here', true)
 					.setTimestamp()],
-				ephemeral: true,
+				ephemeral: false,
 			})
 		})
 			.catch(error => {
-				console.log('Error => ' + error);
+				interaction.reply({
+					content: error,
+					ephemeral: false,
+				})
 			})
 	}
 });
