@@ -1,6 +1,6 @@
 require('dotenv').config();
 const CANVAS_API_DOMAIN = process.env.CANVAS_API_DOMAIN;
-const CANVAS_KEY = process.env.CANVAS_API_TOKEN;
+const CANVAS_API_TOKEN = process.env.CANVAS_API_TOKEN;
 
 function getSelf() {
 	console.log("running getself");
