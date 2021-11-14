@@ -20,7 +20,7 @@ client.on('interactionCreate', async interaction => {
 	if (!interaction.isCommand()) return;
 
 	const { commandName } = interaction;
-
+	
 	if (commandName === 'hello') {
 		await interaction.reply('Hello World!');
 	}
@@ -32,9 +32,9 @@ client.on('interactionCreate', async interaction => {
 		});
 	}
 	if (commandName === 'self') {
-		commands.getSelf.then((response) => {
+		commands.getSelf().then((response) => {
 			const js = JSON.parse(response)
-			console.log(js)
+			//console.log(js)
 			interaction.reply({
 				embeds: [new MessageEmbed()
 					.setColor('#0099ff')
@@ -43,16 +43,45 @@ client.on('interactionCreate', async interaction => {
 						+ 'User Name => ' + js.name)
 					.setThumbnail(js.avatar_url)
 					.setTimestamp()],
-				ephemeral: false,
+				ephemeral: true,
 			})
 		})
 			.catch(error => {
 				interaction.reply({
 					content: error,
-					ephemeral: false,
+					ephemeral: true,
 				})
 			})
 	}
+	if (commandName === 'courses'){
+		const state = interaction.options.getBoolean('state');
+		if(state){
+			commands.getCourses(state).then( response => {
+				const result = JSON.parse(response);
+				console.log(result);
+			}).catch(error => {
+				interaction.reply('Error => ' + error);
+			});
+		}else{
+			commands.getCourses().then( response => {
+				const result = JSON.parse(response);
+				console.log(result);
+			}).catch(error => {
+				interaction.reply('Error => ' + error);
+			});
+		}
+	}
+	/* 
+		const string = interaction.options.getString('input');
+		const integer = interaction.options.getInteger('int');
+		const number = interaction.options.getNumber('num');
+		const boolean = interaction.options.getBoolean('choice');
+		const user = interaction.options.getUser('target');
+		const member = interaction.options.getMember('target');
+		const channel = interaction.options.getChannel('destination');
+		const role = interaction.options.getRole('muted');
+		const mentionable = interaction.options.getMentionable('mentionable');
+	 example */
 });
 
 // logout of server after timeout

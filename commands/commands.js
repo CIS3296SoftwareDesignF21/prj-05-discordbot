@@ -30,9 +30,46 @@ function getSelf() {
 	});
 }
 
-module.exports = {
-	getSelf: getSelf()
+function getCourses(state) {
+	console.log("running getCourses");
+	const https = require('https');
+	return new Promise((resolve, reject) => {
+		let options = {
+			hostname: CANVAS_API_DOMAIN,
+			port: 443,
+			path: '/api/v1/courses',
+			method: 'GET',
+			headers: {
+				'Authorization': 'Bearer ' + CANVAS_API_TOKEN,
+			},
+		};
+		if(state){
+			options = {
+				hostname: CANVAS_API_DOMAIN,
+				port: 443,
+				path: '/api/v1/courses?enrollment_state=active',
+				method: 'GET',
+				headers: {
+					'Authorization': 'Bearer ' + CANVAS_API_TOKEN,
+				},
+			};
+		}
+		https.get(options, response => {
+			let result = ''
+			response.on('data', chunk => {
+				result += chunk
+			})
+			response.on('end', () => {
+				resolve(result)
+			})
+			response.on('error', error => {
+				reject('Error => ' + error)
+			})
+		})
+	});
 }
+
+module.exports = {getSelf, getCourses};
 
 /* getSelf()
 	.then((response) => {
