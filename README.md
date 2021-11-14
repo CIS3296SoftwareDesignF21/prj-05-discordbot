@@ -50,4 +50,4 @@ A UML diagram was created to help those who are new to the project understand th
 
 [commands/deploy-commands.js](commands/deploy-commands.js) defines the commands the bot can recognize and performs the REST api connection to register the commands within the server the bot is connecting to. Every modification toward the file only requires a single run of the file to register and update the bot's commands.
 
-[commands/commands.js](commands/commands.js) contains functions that interect with Canvas LMS API. The unction initial HTTPS requests to the api and receives JSON objects.
+[commands/commands.js](commands/commands.js) contains functions that interect with Canvas LMS API. The functions initial HTTPS requests to the api and receives JSON objects.
