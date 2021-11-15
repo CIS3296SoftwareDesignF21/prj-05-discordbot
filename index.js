@@ -20,7 +20,7 @@ client.on('interactionCreate', async interaction => {
 	if (!interaction.isCommand()) return;
 
 	const { commandName } = interaction;
-	
+
 	if (commandName === 'hello') {
 		await interaction.reply('Hello World!');
 	}
@@ -53,23 +53,28 @@ client.on('interactionCreate', async interaction => {
 				})
 			})
 	}
-	if (commandName === 'courses'){
-		const state = interaction.options.getBoolean('state');
-		if(state){
-			commands.getCourses(state).then( response => {
-				const result = JSON.parse(response);
-				console.log(result);
-			}).catch(error => {
-				interaction.reply('Error => ' + error);
-			});
-		}else{
-			commands.getCourses().then( response => {
-				const result = JSON.parse(response);
-				console.log(result);
-			}).catch(error => {
-				interaction.reply('Error => ' + error);
-			});
-		}
+	if (commandName === 'courses') {
+		const state = interaction.options.getString('state');
+		commands.getCourses(state).then(response => {
+			const result = JSON.parse(response);
+			let arrEmbeds = [];
+			for (var obj in result) {
+				arrEmbeds.push(new MessageEmbed()
+					.setTitle(result[obj].name + '	' + '\nID => ' + result[obj].id)
+					.addFields(
+						{ name: 'Start at', value: "" + result[obj].start_at },
+						{ name: "End at", value: "" + result[obj].end_at }
+					)
+				)
+			}
+			interaction.reply({
+				content: "Total Courses => " + result.length,
+				embeds: arrEmbeds,
+				ephemeral: true,
+			})
+		}).catch(error => {
+			interaction.reply('Error => ' + error);
+		});
 	}
 	/* 
 		const string = interaction.options.getString('input');

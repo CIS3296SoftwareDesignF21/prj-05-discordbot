@@ -32,6 +32,7 @@ function getSelf() {
 
 function getCourses(state) {
 	console.log("running getCourses");
+	
 	const https = require('https');
 	return new Promise((resolve, reject) => {
 		let options = {
@@ -43,17 +44,20 @@ function getCourses(state) {
 				'Authorization': 'Bearer ' + CANVAS_API_TOKEN,
 			},
 		};
-		if(state){
-			options = {
-				hostname: CANVAS_API_DOMAIN,
-				port: 443,
-				path: '/api/v1/courses?enrollment_state=active',
-				method: 'GET',
-				headers: {
-					'Authorization': 'Bearer ' + CANVAS_API_TOKEN,
-				},
-			};
+		if(state !== null){
+			if(state == "active" || state == "completed"){
+				options = {
+					hostname: CANVAS_API_DOMAIN,
+					port: 443,
+					path: '/api/v1/courses?enrollment_state='+state,
+					method: 'GET',
+					headers: {
+						'Authorization': 'Bearer ' + CANVAS_API_TOKEN,
+					},
+				};
+			}else{	reject("Wrong state. Pick either one => active/comepleted.")	}
 		}
+		console.log('	'+options.path)
 		https.get(options, response => {
 			let result = ''
 			response.on('data', chunk => {
@@ -63,7 +67,7 @@ function getCourses(state) {
 				resolve(result)
 			})
 			response.on('error', error => {
-				reject('Error => ' + error)
+				reject(error)
 			})
 		})
 	});

@@ -13,10 +13,10 @@ const commands = [
 	new SlashCommandBuilder().setName('server').setDescription('Replies with server info!'),
 	new SlashCommandBuilder().setName('self').setDescription('Get user info'),
 	new SlashCommandBuilder().setName('courses').setDescription('Get all courses info. Optional True/False: active -> get active courses info')
-		//.addStringOption(option => option.setName('input').setDescription('Enter a string'))
+		.addStringOption(option => option.setName('state').setDescription('Enter a state: active/compeleted'))
 		//.addIntegerOption(option => option.setName('int').setDescription('Enter an integer'))
 		//.addNumberOption(option => option.setName('num').setDescription('Enter a number'))
-		.addBooleanOption(option => option.setName('state').setDescription('Select a state'))
+		//.addBooleanOption(option => option.setName('state').setDescription('Select a state'))
 		//.addUserOption(option => option.setName('target').setDescription('Select a user'))
 		//.addChannelOption(option => option.setName('destination').setDescription('Select a channel'))
 		//.addRoleOption(option => option.setName('muted').setDescription('Select a role'))
