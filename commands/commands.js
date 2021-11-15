@@ -45,7 +45,7 @@ function getCourses(state) {
 			},
 		};
 		if(state !== null){
-			if(state == "active" || state == "completed"){
+			if(state === "active" || state === "completed"){
 				options = {
 					hostname: CANVAS_API_DOMAIN,
 					port: 443,
