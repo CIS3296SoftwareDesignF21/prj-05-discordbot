@@ -1,5 +1,5 @@
 const { Client, Intents, MessageEmbed, MessageAttachment, Message } = require('discord.js');
-const commands = require('./commands/commands');
+const commands = require('./commands/getAPIs');
 require('dotenv').config();
 
 // read in value of discord bot token from the .env file
