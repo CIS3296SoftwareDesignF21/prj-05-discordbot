@@ -68,18 +68,18 @@ client.on('interactionCreate', async interaction => {
 						{ name: 'Start at', value: '' + result[obj].start_at },
 						{ name: 'End at', value: '' + result[obj].end_at },
 					),
-				),
+				);
 			}
 			interaction.reply({
-				content: "Total Courses => " + result.length,
+				content: 'Total Courses => ' + result.length,
 				embeds: arrEmbeds,
 				ephemeral: true,
-			})
+			});
 		}).catch(error => {
 			interaction.reply('Error => ' + error);
 		});
 	}
-	/* 
+	/*
 		const string = interaction.options.getString('input');
 		const integer = interaction.options.getInteger('int');
 		const number = interaction.options.getNumber('num');
