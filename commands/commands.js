@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path:'../.env' });
 const CANVAS_API_DOMAIN = process.env.CANVAS_API_DOMAIN;
 const CANVAS_API_TOKEN = process.env.CANVAS_API_TOKEN;
 
