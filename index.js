@@ -33,25 +33,28 @@ client.on('interactionCreate', async interaction => {
 	}
 	if (commandName === 'self') {
 		commands.getSelf().then((response) => {
-			const js = JSON.parse(response)
-			//console.log(js)
+			const js = JSON.parse(response);
+			console.log(js);
 			interaction.reply({
 				embeds: [new MessageEmbed()
 					.setColor('#0099ff')
-					.setTitle('User Info')
-					.setDescription('User ID => ' + js.id + '\n'
-						+ 'User Name => ' + js.name)
+					.setTitle(js.name)
+					.setDescription(
+						'Canvas User ID => ' + js.id + '\n'
+						+ 'TUID => ' + js.integration_id + '\n'
+						+ 'Email => ' + js.primary_email + '\n'
+						+ 'User Bio => "' + js.bio + '"\n')
 					.setThumbnail(js.avatar_url)
 					.setTimestamp()],
 				ephemeral: true,
-			})
+			});
 		})
 			.catch(error => {
 				interaction.reply({
 					content: error,
 					ephemeral: true,
-				})
-			})
+				});
+			});
 	}
 	if (commandName === 'courses') {
 		const state = interaction.options.getString('state');
@@ -62,10 +65,10 @@ client.on('interactionCreate', async interaction => {
 				arrEmbeds.push(new MessageEmbed()
 					.setTitle(result[obj].name + '	' + '\nID => ' + result[obj].id)
 					.addFields(
-						{ name: 'Start at', value: "" + result[obj].start_at },
-						{ name: "End at", value: "" + result[obj].end_at }
-					)
-				)
+						{ name: 'Start at', value: '' + result[obj].start_at },
+						{ name: 'End at', value: '' + result[obj].end_at },
+					),
+				),
 			}
 			interaction.reply({
 				content: "Total Courses => " + result.length,
