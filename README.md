@@ -44,10 +44,15 @@ Clone the repository to your computer, follow the instructions above.
 
 # UML Diagram
 
-![UML Diagram of the Application](/images/uml-diagram.png)
+![UML Diagram of the Application](/images/latest-uml-class-diagram.png)
 
 A UML diagram was created to help those who are new to the project understand the architecture of the project. The diagram currently contains details on two classes, the environment variable file, and the discord.js library. Both [index.js](index.js) and [deploy-commands.js](deploy-commands.js) are linked to the .env file and recieve the various private keys for their use. [index.js](index.js) and [deploy-commands.js](deploy-commands.js) use functions and classes from the discord.js package, and these methods are listed in the diagram under discord.js. 
 
+# UML Sequence Diagram
+
+![UML Sequence Diagram of an Example "Hello" Command](/images/hello-command-uml-sequence.png)
+
+This UML sequence diagram explains the interaction of the program with a simply command. If the user types "/hello" in their Discord server, the bot will respond with "Hello World!". The server receives the message, the bot accepts it as input input, recognizes the command, and in [index.js](index.js) through the Discord.js library, sends a response to the server for the user to see. 
 
 # Structure
 [index.js](index.js) performs the initial connection to the Discord bot and logs it into the server using the client variable. Index.js also recognizes command inputs and provides the response to the server.

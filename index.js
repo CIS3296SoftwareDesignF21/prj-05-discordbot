@@ -13,7 +13,7 @@ client.once('ready', () => {
 	console.log('Ready!');
 });
 
-// Login to server with your client's token, logout subsequently
+// Login to server with your client's token
 client.login(DISCORD_BOT_TOKEN);
 
 client.on('interactionCreate', async interaction => {
