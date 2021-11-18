@@ -5,7 +5,7 @@ Tasks from Trello that each team member has accomplished this week (one coding t
 #### Jacky Chen He
 1. Added `/self` bot command that prints the user's Canvas id and name.
 2. Added `/courses options:active/completed` bot command that prints a list of the user's courses based on optional flags.
-3. Modfiy and renew install and run instruction on README.md.
+3. Modfied and renewed install and run instruction on README.md.
 
 #### Aaron Scofield
 - Created hello-command-uml-sequence.png, added description to readme
