@@ -18,20 +18,23 @@ Three Personas:
 
 3. Professor Steven is computer science professor and in every single one of his classes he is a part of a discord server that allows him to communicate with his students. He spends a lot of time clarifying canvas assignments to his students and reminding them of due dates. Being a cs professor he is aware that there could be a product that makes his life a lot easier and takes out the human element in reminding students to complete their assignments and clarifying homeworks. When he discovers the discord bot he creates a server with the plugin every single time and it streamlines his communication with the students to such a point that he must only handle unexpected circumstances like unforseen abiguities.
 
+# How to Install
+Prerequisite: Node Package Manager (NPM)
+## Create a bot and add it to your server
+1. Go to [Discord Developer Portal](https://discord.com/developers/applications)
+2. Click on ```New Application``` >>> Enter a name and comfirm the pop-up window by clicking the "Create" button.
+4. On the left panel, go to ```SETTINGS/Bot``` and click on ```Add Bot``` button and create a new bot.
+5. Create a bot user, enter ```USERNAME```, and copy ```TOKEN``` for env.```DISCORD_BOT_TOKEN=``` or store it somewhere safe for now.
+6. On the left panel, go to ```SETTINGS/OAuth2/OAUth2 URL Generator```. Under ```SCOPES```, select ```bot``` and ```applications.commands```. At the bottom of the page, under ```GENERATED URL```, copy the url and paste it on your browser to add the bot to your desired server.
+
 # How to Run
-1. Clone the repository to your computer
-2. Move into the directory of the project
+1. Clone the repository or download the newest release.
+2. Move into the directory of the project.
 3. Create a file in the directory called “.env” with the format found in [.env.example](.env.example)
-4. Instructions to configure the Node app and run the bot are below:
 5. run ```npm install``` to install node dependencies
 6. run ```npm install -g nodemon``` to install node dev. Dependencies
 7. Navigate into the folder entitled, "commands" and run ```node deploy-commands.js``` to register the commands with your Discord bot/server. 
 8. run ```node .``` or ```node index.js``` to start the bot
-
-# How to Install
-Prerequisite: Node Package Manager (NPM)
-
-Clone the repository to your computer, follow the instructions above. 
 
 # Week 1 Tasks
 [week1.md](/weekly_readme/week1.md)
