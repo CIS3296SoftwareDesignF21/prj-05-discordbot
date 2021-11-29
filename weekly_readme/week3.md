@@ -1,6 +1,10 @@
 Tasks from Trello that each team member has accomplished this week (one coding task and one writing task each week):
 
 #### Yuri Yakymiv
+1. Added authentication webserver
+2. Created MongoDB instance for managing authentication
+3. Created hooks in discord bot for authentication
+4. Canvas API UML diagram
 
 #### Jacky Chen He
 1. Added `/self` bot command that prints the user's Canvas id and name.
