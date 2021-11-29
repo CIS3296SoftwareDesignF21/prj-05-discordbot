@@ -26,7 +26,6 @@ Prerequisite: Node Package Manager (NPM)
 4. On the left panel, go to ```SETTINGS/Bot``` and click on ```Add Bot``` button and create a new bot.
 5. Create a bot user, enter ```USERNAME```, and copy ```TOKEN``` for env.```DISCORD_BOT_TOKEN=``` or store it somewhere safe for now.
 6. On the left panel, go to ```SETTINGS/OAuth2/OAUth2 URL Generator```. Under ```SCOPES```, select ```bot``` and ```applications.commands```. At the bottom of the page, under ```GENERATED URL```, copy the url and paste it on your browser to add the bot to your desired server.
-7. Create a mongodb instance and add your db link with password into the .env file under MONGO_URL
 
 # How to Run
 1. Clone the repository or download the newest release.
@@ -36,12 +35,6 @@ Prerequisite: Node Package Manager (NPM)
 6. run ```npm install -g nodemon``` to install node dev. Dependencies
 7. Navigate into the folder entitled, "commands" and run ```node deploy-commands.js``` to register the commands with your Discord bot/server.
 8. run ```node .``` or ```node index.js``` to start the bot
-
-# Setting up the bot
-0. `npm install` in the landing_page folder and run the auth webserver (`node landing_page/app.js`)
-1. Run the /canvas_auth command from the discord interface
-2. Follow along with the prompts and share your canvas token and canvas url
-3. You are authenticated!
 
 # Week 1 Tasks
 [week1.md](/weekly_readme/week1.md)
