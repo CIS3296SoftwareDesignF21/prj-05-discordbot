@@ -1,6 +1,8 @@
-const { Client, Intents, MessageEmbed, MessageAttachment, Message } = require('discord.js');
-const { blockQuote, bold, codeBlock} = require('@discordjs/builders')
+const { Client, Intents, MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { blockQuote, bold } = require('@discordjs/builders')
+const wait = require('util').promisify(setTimeout);
 const commands = require('./commands/getAPIs');
+const { waitForDebugger } = require('inspector');
 require('dotenv').config();
 
 // read in value of discord bot token from the .env file
@@ -59,34 +61,74 @@ client.on('interactionCreate', async interaction => {
 	}
 	if (commandName === 'courses') {
 		const state = interaction.options.getString('state');
+		let embed = new MessageEmbed();
 		commands.getCourses(state).then(response => {
 			const result = JSON.parse(response);
-			let embed = new MessageEmbed();
 			let i = 0;
 			for (var obj in result) {
 				//two courses per row
-				if(i%2 == 0 && i!=0){ 
-					embed.addField('\u200B','\u200B') //adds emtpy field
+				if (i % 2 == 0 && i != 0) {
+					embed.addField('\u200B', '\u200B') //adds emtpy field
 				}
 				i++; //counter for two courses per row
-
 				embed.addField(
-					'' + result[obj].name + '\n---\nID ' + result[obj].id,
+					'' + result[obj].name || 'unauthorized',
 					blockQuote(
-						bold('\nCourse Format: ') + result[obj].course_format + "\n---"
-						+ bold('\nStart at: \n') + result[obj].start_at + "\n---"
-						+ bold('\nEnd at: \n') + result[obj].end_at
+						bold('Course ID: ') + result[obj].id
+						+ bold('\nCourse Format: ') + result[obj].course_format
+						+ bold('\nStart at: \n') + ('' + result[obj].start_at).substring(0, 10)
+						+ bold('\nEnd at: \n') + ('' + result[obj].end_at).substring(0, 10)
 					),
 					true
 				)
 			}
 			interaction.reply({
-				embeds: [embed
-					.setColor('#FFC0CB')
-					.setTitle('Your Courses')
-					.setTimestamp()],
-					ephemeral: true,
+				embeds: [
+					embed
+						.setColor('#FFC0CB')
+						.setTitle('Your Courses')
+						.setFooter(bold('You have 10s before this window expires'))
+				],
+				components: [new MessageActionRow()
+					.addComponents(
+						new MessageButton()
+							.setCustomId('ac')
+							.setLabel("Advanced Courses' Info")
+							.setStyle('PRIMARY'),
+					)],
+				ephemeral: true,
 			});
+			//collector for buttons
+			const filter = i => i.customId === 'ac';
+			const collector = interaction.channel.createMessageComponentCollector({ filter, time: 10000 });
+			collector.on('collect', async i => {
+				if (i.customId === 'ac') {
+					let arrEmbeds = [];
+					for (var obj in result) {
+						const sum = await commands.getCourseSummary(result[obj].id)
+							.then(response => JSON.parse(response))
+							.then(something => { return something })
+						arrEmbeds.push(new MessageEmbed()
+							.setTitle(result[obj]?.name || 'unauthorized')
+							.addFields([
+								{ name: bold("Announcement"), value: 'Unread: ' + (sum[0]?.unread_count || 'None'), inline: true },
+								{ name: bold("Discussion Topic"), value: 'Unread: ' + (sum[1]?.unread_count || 'None'), inline: true },
+								//{ name: '\u200B', value: '\u200B'},
+								{ name: bold("Message"), value: 'Unread: ' + (sum[2]?.unread_count || 'None'), inline: true },
+								{ name: bold("Submission"), value: 'Unread: ' + (sum[3]?.unread_count || 'None'), inline: true },
+								{ name: '\u200B', value: '\u200B' },
+							])
+						);
+					}
+					await i.update({ embeds: arrEmbeds, components: [] });
+				}
+			});
+			collector.on('end', collected => {
+				if (collected.size === 0) {
+					interaction.editReply({ embeds: [embed.setFooter(bold("THIS WINDOW HAS EXPIRED"))] })
+				}
+			});
+
 		}).catch(error => {
 			interaction.reply({
 				content: 'Error => ' + error,
@@ -94,6 +136,8 @@ client.on('interactionCreate', async interaction => {
 			});
 		});
 	}
+
+
 	/*
 		const string = interaction.options.getString('input');
 		const integer = interaction.options.getInteger('int');
