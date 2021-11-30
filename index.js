@@ -1,4 +1,6 @@
 const { Client, Intents, MessageEmbed, MessageAttachment, Message } = require('discord.js');
+const { get_canvas_auth } = require('./database.js');
+const canvas = require('node-canvas-api');
 const commands = require('./commands/getAPIs');
 require('dotenv').config();
 
@@ -17,10 +19,33 @@ client.once('ready', () => {
 client.login(DISCORD_BOT_TOKEN);
 
 client.on('interactionCreate', async interaction => {
+	const { guildId } = interaction;
+
+	const canvas_auth = await get_canvas_auth(guildId).catch(console.dir);
+
+	await handle_command(interaction, canvas_auth);
+
+	/*
+		const string = interaction.options.getString('input');
+		const integer = interaction.options.getInteger('int');
+		const number = interaction.options.getNumber('num');
+		const boolean = interaction.options.getBoolean('choice');
+		const user = interaction.options.getUser('target');
+		const member = interaction.options.getMember('target');
+		const channel = interaction.options.getChannel('destination');
+		const role = interaction.options.getRole('muted');
+		const mentionable = interaction.options.getMentionable('mentionable');
+	 example */
+});
+
+async function handle_command(interaction, canvas_auth) {
 	if (!interaction.isCommand()) return;
 
 	const { commandName } = interaction;
 
+	if (commandName === 'canvas_init') {
+		await interaction.reply(`https://canvasdiscordbot.herokuapp.com/guild/${interaction.guildId}`)
+	}
 	if (commandName === 'hello') {
 		await interaction.reply('Hello World!');
 	}
@@ -32,33 +57,32 @@ client.on('interactionCreate', async interaction => {
 		});
 	}
 	if (commandName === 'self') {
-		commands.getSelf().then((response) => {
-			const js = JSON.parse(response);
-			console.log(js);
+		console.log(canvas_auth);
+		commands.getSelf(canvas_auth.canvas_api_token, canvas_auth.canvas_api_domain).then((res) => {
+			const json = JSON.parse(res);
+			console.log(json);
 			interaction.reply({
 				embeds: [new MessageEmbed()
 					.setColor('#0099ff')
-					.setTitle(js.name)
+					.setTitle(json.name)
 					.setDescription(
-						'Canvas User ID => ' + js.id + '\n'
-						+ 'TUID => ' + js.integration_id + '\n'
-						+ 'Email => ' + js.primary_email + '\n'
-						+ 'User Bio => "' + js.bio + '"\n')
-					.setThumbnail(js.avatar_url)
+						'Canvas User ID => ' + json.id + '\n'
+						+ 'TUID => ' + json.integration_id + '\n'
+						+ 'Email => ' + json.primary_email + '\n'
+						+ 'User Bio => "' + json.bio + '"\n')
+					.setThumbnail(json.avatar_url)
 					.setTimestamp()],
 				ephemeral: true,
 			});
 		})
-			.catch(error => {
-				interaction.reply({
-					content: error,
-					ephemeral: true,
-				});
-			});
+		.catch(error => {
+				console.log(error);
+				interaction.reply(error);
+		});
 	}
 	if (commandName === 'courses') {
 		const state = interaction.options.getString('state');
-		commands.getCourses(state).then(response => {
+		commands.getCourses(canvas_auth.canvas_api_token, canvas_auth.canvas_api_domain, state).then(response => {
 			const result = JSON.parse(response);
 			let arrEmbeds = [];
 			for (var obj in result) {
@@ -79,21 +103,11 @@ client.on('interactionCreate', async interaction => {
 			interaction.reply('Error => ' + error);
 		});
 	}
-	/*
-		const string = interaction.options.getString('input');
-		const integer = interaction.options.getInteger('int');
-		const number = interaction.options.getNumber('num');
-		const boolean = interaction.options.getBoolean('choice');
-		const user = interaction.options.getUser('target');
-		const member = interaction.options.getMember('target');
-		const channel = interaction.options.getChannel('destination');
-		const role = interaction.options.getRole('muted');
-		const mentionable = interaction.options.getMentionable('mentionable');
-	 example */
-});
 
-// logout of server after timeout
-/* setTimeout(function() {
-	console.log('destroyed');
-	client.destroy(DISCORD_BOT_TOKEN);
-}, 10000); */
+}
+
+const {
+  Worker, isMainThread, parentPort, workerData
+} = require('worker_threads');
+
+const worker = new Worker('announcements.js');
