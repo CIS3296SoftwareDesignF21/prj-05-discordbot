@@ -83,9 +83,24 @@ async function handle_command(interaction, canvas_auth) {
 		});
 	}
 	if (commandName === 'announcements') {
-		canvas.getAnnouncements(canvas_api_token, canvas_api_domain, "99485").then(res => {
-			console.log(res[0].title);
-			interaction.reply(res[0].title);
+		const course_id = interaction.options.getString('course_id');
+		canvas.getAnnouncements(canvas_api_token, canvas_api_domain, course_id).then(res => {
+			let arrEmbeds = [];
+			var numToDisplay = 10 <= res.length ? 10 : res.length;
+			for(var i = numToDisplay - 1; i >= 0; i--) {
+				console.log(res[i]);
+				arrEmbeds.push(new MessageEmbed()
+					.setTitle(res[i].title + '	' + '\nID => ' + res[i].id)
+					.setTimestamp(new Date(res[i].posted_at))
+					.setAuthor(res[i].user_name)
+					.setURL('http://' + canvas_api_domain + `/courses/${course_id}/discussion_topics/${res[i].id}`)
+				);
+			}
+			interaction.reply({
+				content: 'Announcements',
+				embeds: arrEmbeds,
+				ephemeral: true,
+			});
 		});
 	}
 	if (commandName === 'courses') {

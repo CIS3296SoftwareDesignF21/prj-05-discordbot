@@ -15,7 +15,7 @@ const commands = [
 	new SlashCommandBuilder().setName('courses').setDescription('Get all courses info. Optional True/False: active -> get active courses info'),
 	new SlashCommandBuilder().setName('canvas_init').setDescription('Landing page for authenticating canvas!'),
 	new SlashCommandBuilder().setName('announcements').setDescription('Display announcements for class id!')
-		// .addStringOption(option => option.setName('state').setDescription('Enter a state: active/compeleted')),
+		.addStringOption(option => option.setName('course_id').setDescription('Enter the class course_id')),
 	// .addIntegerOption(option => option.setName('int').setDescription('Enter an integer'))
 	// .addNumberOption(option => option.setName('num').setDescription('Enter a number'))
 	// .addBooleanOption(option => option.setName('state').setDescription('Select a state'))
