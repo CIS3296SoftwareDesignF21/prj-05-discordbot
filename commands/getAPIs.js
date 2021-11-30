@@ -35,31 +35,17 @@ function getCourses(state) {
 
 	const https = require('https');
 	return new Promise((resolve, reject) => {
-		let options = {
+
+		const options = {
 			hostname: CANVAS_API_DOMAIN,
 			port: 443,
-			path: '/api/v1/courses',
+			path: '/api/v1/courses?enrollment_state=' + state + '&per_page=100',
 			method: 'GET',
 			headers: {
 				'Authorization': 'Bearer ' + CANVAS_API_TOKEN,
 			},
 		};
-		if (state !== undefined) {
-			if (state !== null) {
-				if (state === 'active' || state === 'completed') {
-					options = {
-						hostname: CANVAS_API_DOMAIN,
-						port: 443,
-						path: '/api/v1/courses?enrollment_state=' + state,
-						method: 'GET',
-						headers: {
-							'Authorization': 'Bearer ' + CANVAS_API_TOKEN,
-						},
-					};
-				}
-				else { reject('Wrong state. Pick either one => active/comepleted.'); }
-			}
-		}
+
 		console.log(' ' + options.path);
 		https.get(options, response => {
 			let result = '';
@@ -77,7 +63,7 @@ function getCourses(state) {
 }
 
 function getAssignments(course_id, type) {
-	console.log('running getAssignments => course_id: ' + course_id + ', type: ' + type);
+	console.log('running getAssignments => course_id: ' + course_id + ', type: ' + type + '&per_page=100');
 	const https = require ('https');
 
 	return new Promise((resolve, reject) => {
@@ -85,7 +71,7 @@ function getAssignments(course_id, type) {
 		const options = {
 			hostname: CANVAS_API_DOMAIN,
 			port: 443,
-			path: '/api/v1/courses/' + course_id + '/assignments?order_by=due_at' + '&bucket=' + type,
+			path: '/api/v1/courses/' + course_id + '/assignments?order_by=due_at' + '&bucket=' + type + '&per_page=100',
 			method: 'GET',
 			headers: {
 				'Authorization': 'Bearer ' + CANVAS_API_TOKEN,
@@ -108,7 +94,7 @@ function getAssignments(course_id, type) {
 	});
 }
 
-function getActivityStream(state) {
+/* function getActivityStream(state) {
 	console.log('running getActivityStream');
 	console.log('state : = > ' + state);
 	const https = require('https');
@@ -149,6 +135,7 @@ function getActivityStream(state) {
 	});
 }
 
+*/
 
 /* getActivityStream().then(response => console.log(JSON.parse(response)))
 	.catch(error => console.log(error)) */
