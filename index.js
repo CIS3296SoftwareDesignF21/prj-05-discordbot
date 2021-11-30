@@ -1,4 +1,5 @@
 const { Client, Intents, MessageEmbed, MessageAttachment, Message } = require('discord.js');
+const { blockQuote, bold, codeBlock} = require('@discordjs/builders')
 const commands = require('./commands/getAPIs');
 require('dotenv').config();
 
@@ -10,7 +11,7 @@ const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
 // When the client is ready, run this code (only once)
 client.once('ready', () => {
-	console.log('Ready!');
+	console.log(`Ready! Logged in as ${client.user.tag}`);
 });
 
 // Login to server with your client's token, logout subsequently
@@ -57,23 +58,37 @@ client.on('interactionCreate', async interaction => {
 		const state = interaction.options.getString('state');
 		commands.getCourses(state).then(response => {
 			const result = JSON.parse(response);
-			let arrEmbeds = [];
+			let embed = new MessageEmbed();
+			let i = 0;
 			for (var obj in result) {
-				arrEmbeds.push(new MessageEmbed()
-					.setTitle(result[obj].name + '	' + '\nID => ' + result[obj].id)
-					.addFields(
-						{ name: 'Start at', value: "" + result[obj].start_at },
-						{ name: "End at", value: "" + result[obj].end_at }
-					)
+				//two courses per row
+				if(i%2 == 0 && i!=0){ 
+					embed.addField('\u200B','\u200B') //adds emtpy field
+				}
+				i++; //counter for two courses per row
+
+				embed.addField(
+					'' + result[obj].name + '\n---\nID ' + result[obj].id,
+					blockQuote(
+						bold('\nCourse Format: ') + result[obj].course_format + "\n---"
+						+ bold('\nStart at: \n') + result[obj].start_at + "\n---"
+						+ bold('\nEnd at: \n') + result[obj].end_at
+					),
+					true
 				)
 			}
 			interaction.reply({
-				content: "Total Courses => " + result.length,
-				embeds: arrEmbeds,
+				embeds: [embed
+					.setColor('#FFC0CB')
+					.setTitle('Your Courses')
+					.setTimestamp()],
 				ephemeral: true,
 			})
 		}).catch(error => {
-			interaction.reply('Error => ' + error);
+			interaction.reply({
+				content: 'Error => ' + error,
+				ephemeral: true,
+			});
 		});
 	}
 	/* 
