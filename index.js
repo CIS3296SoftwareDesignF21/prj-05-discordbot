@@ -110,6 +110,7 @@ client.on('interactionCreate', async interaction => {
 							.then(something => { return something })
 						arrEmbeds.push(new MessageEmbed()
 							.setTitle(result[obj]?.name || 'unauthorized')
+							.setDescription('ID '+ (result[obj]?.id || 'NONE'))
 							.addFields([
 								{ name: bold("Announcement"), value: 'Unread: ' + (sum[0]?.unread_count || 'None'), inline: true },
 								{ name: bold("Discussion Topic"), value: 'Unread: ' + (sum[1]?.unread_count || 'None'), inline: true },
