@@ -1,5 +1,5 @@
 const { Client, Intents, MessageEmbed, MessageAttachment, Message } = require('discord.js');
-const { blockQuote, bold, codeBlock} = require('@discordjs/builders')
+const { blockQuote, bold, codeBlock} = require('@discordjs/builders');
 const commands = require('./commands/getAPIs');
 require('dotenv').config();
 
@@ -61,31 +61,34 @@ client.on('interactionCreate', async interaction => {
 		const state = interaction.options.getString('state');
 		commands.getCourses(state).then(response => {
 			const result = JSON.parse(response);
-			let embed = new MessageEmbed();
+			const embed = new MessageEmbed();
 			let i = 0;
-			for (var obj in result) {
-				//two courses per row
-				if(i%2 == 0 && i!=0){ 
-					embed.addField('\u200B','\u200B') //adds emtpy field
+			for (const obj in result) {
+				// two courses per row
+				if (i % 2 == 0 && i != 0) {
+					// adds emtpy field
+					embed.addField('\u200B', '\u200B');
 				}
-				i++; //counter for two courses per row
+
+				// counter for two courses per row
+				i++;
 
 				embed.addField(
 					'' + result[obj].name + '\n---\nID ' + result[obj].id,
 					blockQuote(
-						bold('\nCourse Format: ') + result[obj].course_format + "\n---"
-						+ bold('\nStart at: \n') + result[obj].start_at + "\n---"
-						+ bold('\nEnd at: \n') + result[obj].end_at
+						bold('\nCourse Format: ') + result[obj].course_format + '\n---'
+						+ bold('\nStart at: \n') + result[obj].start_at + '\n---'
+						+ bold('\nEnd at: \n') + result[obj].end_at,
 					),
-					true
-				)
+					true,
+				);
 			}
 			interaction.reply({
 				embeds: [embed
 					.setColor('#FFC0CB')
 					.setTitle('Your Courses')
 					.setTimestamp()],
-					ephemeral: true,
+				ephemeral: true,
 			});
 		}).catch(error => {
 			interaction.reply({
@@ -94,6 +97,59 @@ client.on('interactionCreate', async interaction => {
 			});
 		});
 	}
+
+	if (commandName === 'assignments') {
+		// const state = interaction.options.getString('state');
+		commands.getAssignments().then(response => {
+			const reply = JSON.parse(response);
+			const embed = new MessageEmbed();
+			let i = 0;
+
+			// console.log(js);
+
+			for (const obj in reply) {
+				if (i % 2 == 0 && i != 0) {
+					// adds emtpy field
+					embed.addField('\u200B', '\u200B');
+				}
+
+				// counter for two courses per row
+				i++;
+
+				let isSubmitted = '';
+				if (reply[obj].has_submitted_submissions == true) {
+					isSubmitted = 'yes';
+				}
+				else {
+					isSubmitted = 'no';
+				}
+
+				embed.addField(
+					'' + reply[obj].name,
+					blockQuote(
+						bold('Assignment Type: ') + reply[obj].submission_types + '\n' +
+						bold('Submitted: ') + isSubmitted + '\n' +
+						bold('Due Date: ') + reply[obj].due_at + '\n' +
+						bold('Points Possible: ') + reply[obj].points_possible + '\n' +
+						bold('Link to Assignment: ') + reply[obj].html_url,
+					),
+					true,
+				);
+			}
+			interaction.reply({
+				embeds: [embed
+					.setColor('#7289da')
+					.setTitle('Your Assignments')],
+				ephemeral: false,
+			});
+		}).catch(error => {
+			interaction.reply({
+				content: 'Error => ' + error,
+				ephemeral: true,
+			});
+		});
+	}
+
 	/*
 		const string = interaction.options.getString('input');
 		const integer = interaction.options.getInteger('int');

@@ -15,6 +15,7 @@ const commands = [
 	new SlashCommandBuilder().setName('self').setDescription('Get user info'),
 	new SlashCommandBuilder().setName('courses').setDescription('Get all courses info. Optional True/False: active -> get active courses info')
 		.addStringOption(option => option.setName('state').setDescription('Enter a state: active/compeleted')),
+	new SlashCommandBuilder().setName('assignments').setDescription('Get all assignments for a specific course [in test]'),
 	// .addIntegerOption(option => option.setName('int').setDescription('Enter an integer'))
 	// .addNumberOption(option => option.setName('num').setDescription('Enter a number'))
 	// .addBooleanOption(option => option.setName('state').setDescription('Select a state'))

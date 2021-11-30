@@ -31,7 +31,7 @@ function getSelf() {
 }
 
 function getCourses(state) {
-	console.log('running getCourses => state: '+state);
+	console.log('running getCourses => state: ' + state);
 
 	const https = require('https');
 	return new Promise((resolve, reject) => {
@@ -44,7 +44,7 @@ function getCourses(state) {
 				'Authorization': 'Bearer ' + CANVAS_API_TOKEN,
 			},
 		};
-		if(state!== undefined){
+		if (state !== undefined) {
 			if (state !== null) {
 				if (state === 'active' || state === 'completed') {
 					options = {
@@ -76,9 +76,41 @@ function getCourses(state) {
 	});
 }
 
+function getAssignments() {
+	console.log('running getAssignments => state: ');
+	const https = require ('https');
+
+	return new Promise((resolve, reject) => {
+		const options = {
+			hostname: CANVAS_API_DOMAIN,
+			port: 443,
+			path: '/api/v1/courses/101965/assignments',
+			method: 'GET',
+			headers: {
+				'Authorization': 'Bearer ' + CANVAS_API_TOKEN,
+			},
+		};
+
+		https.get(options, response => {
+			let result = '';
+			response.on('data', chunk => {
+				result += chunk;
+				// console.log(chunk.toString());
+			});
+			response.on('end', () => {
+				resolve(result);
+			});
+			response.on('error', error => {
+				reject(error);
+			});
+		});
+
+	});
+}
+
 function getActivityStream(state) {
 	console.log('running getActivityStream');
-	console.log("state : = > " + state);
+	console.log('state : = > ' + state);
 	const https = require('https');
 	return new Promise((resolve, reject) => {
 		let options = {
@@ -125,7 +157,7 @@ function getActivityStream(state) {
 	.catch(error => console.log(error)) */
 
 
-module.exports = { getSelf, getCourses };
+module.exports = { getSelf, getCourses, getAssignments };
 
 /* getSelf()
 	.then((response) => {
