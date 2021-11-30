@@ -14,7 +14,7 @@ client.once('ready', () => {
 	console.log(`Ready! Logged in as ${client.user.tag}`);
 });
 
-// Login to server with your client's token, logout subsequently
+// Login to server with your client's token
 client.login(DISCORD_BOT_TOKEN);
 
 client.on('interactionCreate', async interaction => {
@@ -34,25 +34,28 @@ client.on('interactionCreate', async interaction => {
 	}
 	if (commandName === 'self') {
 		commands.getSelf().then((response) => {
-			const js = JSON.parse(response)
-			//console.log(js)
+			const js = JSON.parse(response);
+			console.log(js);
 			interaction.reply({
 				embeds: [new MessageEmbed()
 					.setColor('#0099ff')
-					.setTitle('User Info')
-					.setDescription('User ID => ' + js.id + '\n'
-						+ 'User Name => ' + js.name)
+					.setTitle(js.name)
+					.setDescription(
+						'Canvas User ID => ' + js.id + '\n'
+						+ 'TUID => ' + js.integration_id + '\n'
+						+ 'Email => ' + js.primary_email + '\n'
+						+ 'User Bio => "' + js.bio + '"\n')
 					.setThumbnail(js.avatar_url)
 					.setTimestamp()],
 				ephemeral: true,
-			})
+			});
 		})
 			.catch(error => {
 				interaction.reply({
 					content: error,
 					ephemeral: true,
-				})
-			})
+				});
+			});
 	}
 	if (commandName === 'courses') {
 		const state = interaction.options.getString('state');
@@ -82,8 +85,20 @@ client.on('interactionCreate', async interaction => {
 					.setColor('#FFC0CB')
 					.setTitle('Your Courses')
 					.setTimestamp()],
+				arrEmbeds.push(new MessageEmbed()
+					.setTitle(result[obj].name + '	' + '\nID => ' + result[obj].id)
+					.addFields(
+						{ name: 'Start at', value: '' + result[obj].start_at },
+						{ name: 'End at', value: '' + result[obj].end_at },
+					),
+				);
+			}
+			interaction.reply({
+				content: 'Total Courses => ' + result.length,
+				embeds: arrEmbeds,
+
 				ephemeral: true,
-			})
+			});
 		}).catch(error => {
 			interaction.reply({
 				content: 'Error => ' + error,
@@ -91,7 +106,7 @@ client.on('interactionCreate', async interaction => {
 			});
 		});
 	}
-	/* 
+	/*
 		const string = interaction.options.getString('input');
 		const integer = interaction.options.getInteger('int');
 		const number = interaction.options.getNumber('num');

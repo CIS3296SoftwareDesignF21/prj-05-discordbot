@@ -1,7 +1,6 @@
 require('dotenv').config();
 const CANVAS_API_DOMAIN = process.env.CANVAS_API_DOMAIN;
 const CANVAS_API_TOKEN = process.env.CANVAS_API_TOKEN;
-console.log(CANVAS_API_DOMAIN);
 
 function getSelf() {
 	console.log('running getself');
@@ -10,7 +9,7 @@ function getSelf() {
 		const options = {
 			hostname: CANVAS_API_DOMAIN,
 			port: 443,
-			path: '/api/v1/users/self',
+			path: '/api/v1/users/self/profile',
 			method: 'GET',
 			headers: {
 				'Authorization': 'Bearer ' + CANVAS_API_TOKEN,
