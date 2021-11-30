@@ -85,19 +85,7 @@ client.on('interactionCreate', async interaction => {
 					.setColor('#FFC0CB')
 					.setTitle('Your Courses')
 					.setTimestamp()],
-				arrEmbeds.push(new MessageEmbed()
-					.setTitle(result[obj].name + '	' + '\nID => ' + result[obj].id)
-					.addFields(
-						{ name: 'Start at', value: '' + result[obj].start_at },
-						{ name: 'End at', value: '' + result[obj].end_at },
-					),
-				);
-			}
-			interaction.reply({
-				content: 'Total Courses => ' + result.length,
-				embeds: arrEmbeds,
-
-				ephemeral: true,
+					ephemeral: true,
 			});
 		}).catch(error => {
 			interaction.reply({
