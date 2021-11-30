@@ -41,6 +41,8 @@ client.on('interactionCreate', async interaction => {
 async function handle_command(interaction, canvas_auth) {
 	if (!interaction.isCommand()) return;
 
+	const { canvas_api_token, canvas_api_domain } = canvas_auth;
+
 	const { commandName } = interaction;
 
 	if (commandName === 'canvas_init') {
@@ -80,6 +82,12 @@ async function handle_command(interaction, canvas_auth) {
 				interaction.reply(error);
 		});
 	}
+	if (commandName === 'announcements') {
+		canvas.getAnnouncements(canvas_api_token, canvas_api_domain, "99485").then(res => {
+			console.log(res[0].title);
+			interaction.reply(res[0].title);
+		});
+	}
 	if (commandName === 'courses') {
 		const state = interaction.options.getString('state');
 		commands.getCourses(canvas_auth.canvas_api_token, canvas_auth.canvas_api_domain, state).then(response => {
@@ -105,9 +113,3 @@ async function handle_command(interaction, canvas_auth) {
 	}
 
 }
-
-const {
-  Worker, isMainThread, parentPort, workerData
-} = require('worker_threads');
-
-const worker = new Worker('announcements.js');

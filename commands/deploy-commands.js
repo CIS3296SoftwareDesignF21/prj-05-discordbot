@@ -13,7 +13,8 @@ const commands = [
 	new SlashCommandBuilder().setName('server').setDescription('Replies with server info!'),
 	new SlashCommandBuilder().setName('self').setDescription('Get user info'),
 	new SlashCommandBuilder().setName('courses').setDescription('Get all courses info. Optional True/False: active -> get active courses info'),
-	new SlashCommandBuilder().setName('canvas_init').setDescription('Landing page for authenticating canvas!')
+	new SlashCommandBuilder().setName('canvas_init').setDescription('Landing page for authenticating canvas!'),
+	new SlashCommandBuilder().setName('announcements').setDescription('Display announcements for class id!')
 		// .addStringOption(option => option.setName('state').setDescription('Enter a state: active/compeleted')),
 	// .addIntegerOption(option => option.setName('int').setDescription('Enter an integer'))
 	// .addNumberOption(option => option.setName('num').setDescription('Enter a number'))
