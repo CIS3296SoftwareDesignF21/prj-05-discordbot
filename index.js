@@ -99,8 +99,9 @@ client.on('interactionCreate', async interaction => {
 	}
 
 	if (commandName === 'assignments') {
-		// const state = interaction.options.getString('state');
-		commands.getAssignments().then(response => {
+		const course_id = interaction.options.getString('course_id');
+		const type = interaction.options.getString('type');
+		commands.getAssignments(course_id, type).then(response => {
 			const reply = JSON.parse(response);
 			const embed = new MessageEmbed();
 			let i = 0;

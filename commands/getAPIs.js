@@ -76,15 +76,16 @@ function getCourses(state) {
 	});
 }
 
-function getAssignments() {
-	console.log('running getAssignments => state: ');
+function getAssignments(course_id, type) {
+	console.log('running getAssignments => course_id: ' + course_id + ', type: ' + type);
 	const https = require ('https');
 
 	return new Promise((resolve, reject) => {
+		// only allow command to be used with course id specified as an argument
 		const options = {
 			hostname: CANVAS_API_DOMAIN,
 			port: 443,
-			path: '/api/v1/courses/101965/assignments',
+			path: '/api/v1/courses/' + course_id + '/assignments?order_by=due_at' + '&bucket=' + type,
 			method: 'GET',
 			headers: {
 				'Authorization': 'Bearer ' + CANVAS_API_TOKEN,
@@ -104,7 +105,6 @@ function getAssignments() {
 				reject(error);
 			});
 		});
-
 	});
 }
 
