@@ -1,5 +1,5 @@
-const { Client, Intents, MessageEmbed, MessageAttachment, Message } = require('discord.js');
-const { blockQuote, bold, codeBlock} = require('@discordjs/builders');
+const { Client, Intents, MessageEmbed } = require('discord.js');
+const { blockQuote, bold } = require('@discordjs/builders');
 const commands = require('./commands/getAPIs');
 require('dotenv').config();
 
@@ -25,6 +25,7 @@ client.on('interactionCreate', async interaction => {
 	if (commandName === 'hello') {
 		await interaction.reply('Hello World!');
 	}
+
 	if (commandName === 'server') {
 		await interaction.reply({
 			content: `Server name: ${interaction.guild.name}\n`
@@ -32,6 +33,7 @@ client.on('interactionCreate', async interaction => {
 			ephemeral: true,
 		});
 	}
+
 	if (commandName === 'self') {
 		commands.getSelf().then((response) => {
 			const js = JSON.parse(response);
@@ -57,10 +59,12 @@ client.on('interactionCreate', async interaction => {
 				});
 			});
 	}
+
 	if (commandName === 'courses') {
 		const state = interaction.options.getString('state');
 		commands.getCourses(state).then(response => {
 			const result = JSON.parse(response);
+			// console.log(result);
 			const embed = new MessageEmbed();
 			let i = 0;
 			for (const obj in result) {
@@ -72,7 +76,6 @@ client.on('interactionCreate', async interaction => {
 
 				// counter for two courses per row
 				i++;
-
 				embed.addField(
 					'' + result[obj].name + '\n---\nID ' + result[obj].id,
 					blockQuote(
@@ -101,13 +104,13 @@ client.on('interactionCreate', async interaction => {
 	if (commandName === 'assignments') {
 		const course_id = interaction.options.getString('course_id');
 		const type = interaction.options.getString('type');
+
 		commands.getAssignments(course_id, type).then(response => {
 			const reply = JSON.parse(response);
 			const embed = new MessageEmbed();
 			let i = 0;
 
 			// console.log(js);
-
 			for (const obj in reply) {
 				if (i % 2 == 0 && i != 0) {
 					// adds emtpy field
@@ -163,9 +166,3 @@ client.on('interactionCreate', async interaction => {
 		const mentionable = interaction.options.getMentionable('mentionable');
 	 example */
 });
-
-// logout of server after timeout
-/* setTimeout(function() {
-	console.log('destroyed');
-	client.destroy(DISCORD_BOT_TOKEN);
-}, 10000); */
