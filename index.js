@@ -92,36 +92,69 @@ client.on('interactionCreate', async interaction => {
 				components: [new MessageActionRow()
 					.addComponents(
 						new MessageButton()
-							.setCustomId('ac')
-							.setLabel("Advanced Courses' Info")
+							.setCustomId('todo')
+							.setLabel("TODOS")
 							.setStyle('PRIMARY'),
 					)],
 				ephemeral: true,
 			});
 			//collector for buttons
-			const filter = i => i.customId === 'ac';
+			const filter = i => i.customId === 'todo';
 			const collector = interaction.channel.createMessageComponentCollector({ filter, time: 10000 });
 			collector.on('collect', async i => {
-				if (i.customId === 'ac') {
+				if (i.customId === 'todo') {
 					let arrEmbeds = [];
 					for (var obj in result) {
-						const sum = await commands.getCourseSummary(result[obj].id)
+						//get specific course summary
+						/* const sum = await commands.getCourseSummary(result[obj].id)
 							.then(response => JSON.parse(response))
-							.then(something => { return something })
-						arrEmbeds.push(new MessageEmbed()
+							.then(something => { return something }); */
+						//get specific course todos
+						const todos = await commands.getTodo(result[obj].id)
+							.then(response => JSON.parse(response))
+							.then(something => { return something });
+
+						let e = new MessageEmbed()
 							.setTitle(result[obj]?.name || 'unauthorized')
-							.setDescription('ID '+ (result[obj]?.id || 'NONE'))
-							.addFields([
-								{ name: bold("Announcement"), value: 'Unread: ' + (sum[0]?.unread_count || 'None'), inline: true },
-								{ name: bold("Discussion Topic"), value: 'Unread: ' + (sum[1]?.unread_count || 'None'), inline: true },
-								//{ name: '\u200B', value: '\u200B'},
-								{ name: bold("Message"), value: 'Unread: ' + (sum[2]?.unread_count || 'None'), inline: true },
-								{ name: bold("Submission"), value: 'Unread: ' + (sum[3]?.unread_count || 'None'), inline: true },
-								{ name: '\u200B', value: '\u200B' },
+							.setDescription('ID ' + (result[obj]?.id || 'NONE'));
+						if(todos[0] !== undefined){
+							e.addFields([
+								{
+									name: todos[0]?.assignment.name || 'None',
+									value: blockQuote(
+										bold('Due at: ') + (todos[0]?.assignment.due_at || 'None')
+										+ bold('\nSubmission Types: ') + (todos[0]?.assignment.submission_types[0] || 'None')
+										+ bold('\nPoints: ') + (todos[0]?.assignment.points_possible || 'None')
+										+ bold('\nSubmitted: ') + (todos[0]?.assignment.has_submitted_submissions || 'None')
+										+ bold('\nURL: ') + (todos[0]?.assignment.html_url || 'None')
+									)
+								},
+								{
+									name: todos[1]?.assignment.name || 'None',
+									value: blockQuote(
+										bold('Due at: ') + (todos[1]?.assignment.due_at || 'None')
+										+ bold('\nSubmission Types: ') + (todos[1]?.assignment.submission_types[0] || 'None')
+										+ bold('\nPoints: ') + (todos[1]?.assignment.points_possible || 'None')
+										+ bold('\nSubmitted: ') + (todos[1]?.assignment.has_submitted_submissions || 'None')
+										+ bold('\nURL: ') + (todos[1]?.assignment.html_url || 'None')
+									)
+								}
+								,
+								{
+									name: todos[2]?.assignment.name || 'None',
+									value: blockQuote(
+										bold('Due at: ') + (todos[2]?.assignment.due_at || 'None')
+										+ bold('\nSubmission Types: ') + (todos[2]?.assignment.submission_types[0] || 'None')
+										+ bold('\nPoints: ') + (todos[2]?.assignment.points_possible || 'None')
+										+ bold('\nSubmitted: ') + (todos[2]?.assignment.has_submitted_submissions || 'None')
+										+ bold('\nURL: ') + (todos[2]?.assignment.html_url || 'None')
+									)
+								}
 							])
-						);
+						}
+						arrEmbeds.push(e);
 					}
-					await i.update({ embeds: arrEmbeds, components: [] });
+					await interaction.editReply({ embeds: arrEmbeds, components: [] });
 				}
 			});
 			collector.on('end', collected => {

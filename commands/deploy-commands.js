@@ -3,7 +3,7 @@ const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 // const { clientId, guildId, token } = require('./config.json');
 // updated require command to get .env file one directory above current [AS 11/17/21]
-require('dotenv').config({ path:'../.env' });
+require('dotenv').config({ path:'.env' });
 const CLIENT_ID = process.env.CLIENT_ID;
 const GUILD_ID = process.env.GUILD_ID;
 const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
