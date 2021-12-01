@@ -92,16 +92,22 @@ client.on('interactionCreate', async interaction => {
 				components: [new MessageActionRow()
 					.addComponents(
 						new MessageButton()
+							.setCustomId('sum')
+							.setLabel("Activity Summary")
+							.setStyle('PRIMARY')
+					).addComponents(
+						new MessageButton()
 							.setCustomId('todo')
 							.setLabel("TODOS")
-							.setStyle('PRIMARY'),
-					)],
+							.setStyle('DANGER'),
+					),],
 				ephemeral: true,
 			});
 			//collector for buttons
-			const filter = i => i.customId === 'todo';
+			const filter = i => i.customId === 'todo' || i.customId === 'sum';
 			const collector = interaction.channel.createMessageComponentCollector({ filter, time: 10000 });
 			collector.on('collect', async i => {
+				//TODO button
 				if (i.customId === 'todo') {
 					let arrEmbeds = [];
 					for (var obj in result) {
@@ -116,43 +122,52 @@ client.on('interactionCreate', async interaction => {
 
 						let e = new MessageEmbed()
 							.setTitle(result[obj]?.name || 'unauthorized')
-							.setDescription('ID ' + (result[obj]?.id || 'NONE'));
-						if(todos[0] !== undefined){
-							e.addFields([
-								{
-									name: todos[0]?.assignment.name || 'None',
-									value: blockQuote(
-										bold('Due at: ') + (todos[0]?.assignment.due_at || 'None')
-										+ bold('\nSubmission Types: ') + (todos[0]?.assignment.submission_types[0] || 'None')
-										+ bold('\nPoints: ') + (todos[0]?.assignment.points_possible || 'None')
-										+ bold('\nSubmitted: ') + (todos[0]?.assignment.has_submitted_submissions || 'None')
-										+ bold('\nURL: ') + (todos[0]?.assignment.html_url || 'None')
-									)
-								},
-								{
-									name: todos[1]?.assignment.name || 'None',
-									value: blockQuote(
-										bold('Due at: ') + (todos[1]?.assignment.due_at || 'None')
-										+ bold('\nSubmission Types: ') + (todos[1]?.assignment.submission_types[0] || 'None')
-										+ bold('\nPoints: ') + (todos[1]?.assignment.points_possible || 'None')
-										+ bold('\nSubmitted: ') + (todos[1]?.assignment.has_submitted_submissions || 'None')
-										+ bold('\nURL: ') + (todos[1]?.assignment.html_url || 'None')
-									)
+							.setDescription('ID ' + (result[obj]?.id || 'NONE'))
+						if (todos[0] !== undefined) {
+							for (let i = 0; i < 3; i++) {
+								if (todos[i] !== undefined) {
+									e.addFields([
+										{
+											name: todos[i]?.assignment.name || 'None',
+											value: blockQuote(
+												bold('Due at: ') + (todos[i]?.assignment.due_at || 'None')
+												+ bold('\nSubmission Types: ') + (todos[i]?.assignment.submission_types[0] || 'None')
+												+ bold('\nPoints: ') + (todos[i]?.assignment.points_possible || 'None')
+												+ bold('\nURL: ') + (todos[i]?.assignment.html_url || 'None')
+											)
+										}
+									])
 								}
-								,
-								{
-									name: todos[2]?.assignment.name || 'None',
-									value: blockQuote(
-										bold('Due at: ') + (todos[2]?.assignment.due_at || 'None')
-										+ bold('\nSubmission Types: ') + (todos[2]?.assignment.submission_types[0] || 'None')
-										+ bold('\nPoints: ') + (todos[2]?.assignment.points_possible || 'None')
-										+ bold('\nSubmitted: ') + (todos[2]?.assignment.has_submitted_submissions || 'None')
-										+ bold('\nURL: ') + (todos[2]?.assignment.html_url || 'None')
-									)
-								}
-							])
+							}
+						} else {
+							e.setFooter('There are no TODOS');
 						}
 						arrEmbeds.push(e);
+					}
+					await interaction.editReply({ embeds: arrEmbeds, components: [] });
+				}
+				//activity summary button
+				if (i.customId === 'sum') {
+					let arrEmbeds = [];
+					for (var obj in result) {
+						//get specific course summary
+						const sum = await commands.getCourseSummary(result[obj].id)
+							.then(response => JSON.parse(response))
+							.then(something => { return something });
+						arrEmbeds.push(
+							new MessageEmbed()
+								.setTitle(result[obj]?.name || 'undefined')
+								.setDescription('ID '+ (result[obj]?.id || 'undefined'))
+								.addField(
+									'Unreads',
+									blockQuote(
+										bold('Announcement: ') + (sum[0]?.unread_count || 'none')
+										+ bold('\nDiscussion Topic: ') + (sum[1]?.unread_count || 'none')
+										+ bold('\nMessage: ') + (sum[2]?.unread_count || 'none')
+										+ bold('\nSubmission: ') + (sum[3]?.unread_count || 'none')
+									)
+								)
+						);
 					}
 					await interaction.editReply({ embeds: arrEmbeds, components: [] });
 				}
