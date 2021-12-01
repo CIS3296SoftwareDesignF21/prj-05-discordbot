@@ -900,7 +900,8 @@
   "version" "1.0.6"
 
 "node-canvas-api@git+https://github.com/ypyakymiv/node-canvas-api.git":
-  "resolved" "git+ssh://git@github.com/ypyakymiv/node-canvas-api.git#9e5a2d383fe4db9d6ef17115ff2bc501309fb8f4"
+  "integrity" "sha512-1avpWrwPN3rpCj8rHCv6jh4JXKWj+tqVOtB/sMmE5fl9R0cgyyieu8uGiLaJLAwBuxucQR84Kf34QGrRY1hKIA=="
+  "resolved" "git+ssh://git@github.com/ypyakymiv/node-canvas-api.git"
   "version" "1.7.3"
   dependencies:
     "bottleneck" "^2.19.4"
