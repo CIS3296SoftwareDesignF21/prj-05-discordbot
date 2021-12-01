@@ -1,6 +1,5 @@
-
 const { Client, Intents, MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
-const { blockQuote, bold } = require('@discordjs/builders')
+const { blockQuote, bold } = require('@discordjs/builders');
 const commands = require('./commands/getAPIs');
 require('dotenv').config();
 
@@ -63,23 +62,25 @@ client.on('interactionCreate', async interaction => {
 
 	if (commandName === 'courses') {
 		const state = interaction.options.getString('state');
-		let embed = new MessageEmbed();
+		const embed = new MessageEmbed();
 		commands.getCourses(state).then(response => {
 			const result = JSON.parse(response);
 			let i = 0;
-			for (var obj in result) {
-				//two courses per row
+			for (const obj in result) {
+				// two courses per row
 				if (i % 2 == 0 && i != 0) {
-					embed.addField('\u200B', '\u200B') //adds emtpy field
+					// adds emtpy field
+					embed.addField('\u200B', '\u200B');
 				}
-				i++; //counter for two courses per row
+				// counter for two courses per row
+				i++;
 				embed.addField(
 					'' + result[obj].name || 'unauthorized',
 					blockQuote(
 						bold('Course ID: ') + result[obj].id
 						+ bold('\nCourse Format: ') + result[obj].course_format
 						+ bold('\nStart at: \n') + ('' + result[obj].start_at).substring(0, 10)
-						+ bold('\nEnd at: \n') + ('' + result[obj].end_at).substring(0, 10)
+						+ bold('\nEnd at: \n') + ('' + result[obj].end_at).substring(0, 10),
 					),
 					true,
 				);
@@ -95,12 +96,12 @@ client.on('interactionCreate', async interaction => {
 					.addComponents(
 						new MessageButton()
 							.setCustomId('sum')
-							.setLabel("Activity Summary")
+							.setLabel('Activity Summary')
 							.setStyle('PRIMARY')
 					).addComponents(
 						new MessageButton()
 							.setCustomId('todo')
-							.setLabel("TODOS")
+							.setLabel('TODOS')
 							.setStyle('DANGER'),
 					),],
 				ephemeral: true,
@@ -187,8 +188,8 @@ client.on('interactionCreate', async interaction => {
 			});
 		});
 	}
-  
-  if (commandName === 'assignments') {
+
+	if (commandName === 'assignments') {
 		const course_id = interaction.options.getString('course_id');
 		const type = interaction.options.getString('type');
 

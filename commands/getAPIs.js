@@ -66,7 +66,7 @@ function getCourseSummary(id) {
 	console.log('running getCourseSummary');
 	const https = require('https');
 	return new Promise((resolve, reject) => {
-		let options = {
+		const options = {
 			hostname: CANVAS_API_DOMAIN,
 			port: 443,
 			path: '/api/v1/courses/' + id + '/activity_stream/summary',
@@ -136,11 +136,11 @@ function getTodo(id) {
 				'Authorization': 'Bearer ' + CANVAS_API_TOKEN,
 			},
 		};
-		if(id !== undefined){
+		if (id !== undefined) {
 			options = {
 				hostname: CANVAS_API_DOMAIN,
 				port: 443,
-				path: '/api/v1/courses/'+id+'/todo',
+				path: '/api/v1/courses/' + id + '/todo',
 				method: 'GET',
 				headers: {
 					'Authorization': 'Bearer ' + CANVAS_API_TOKEN,
@@ -162,8 +162,6 @@ function getTodo(id) {
 		});
 	});
 }
-
-
 
 function getActivityStream(state) {
 	console.log('running getActivityStream');
@@ -209,4 +207,4 @@ function getActivityStream(state) {
 /* getCourses("active").then(response => console.log(JSON.parse(response)))
 	.catch(error => console.log(error)) */
 
-module.exports = { getSelf, getCourses, getCourseSummary, getTodo, getAsssignments };
+module.exports = { getSelf, getCourses, getCourseSummary, getTodo, getAssignments, getActivityStream };
