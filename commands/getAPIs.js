@@ -1,18 +1,16 @@
 require('dotenv').config();
-const CANVAS_API_DOMAIN = process.env.CANVAS_API_DOMAIN;
-const CANVAS_API_TOKEN = process.env.CANVAS_API_TOKEN;
 
-function getSelf() {
+function getSelf(token, domain) {
 	console.log('running getself');
 	const https = require('https');
 	return new Promise((resolve, reject) => {
 		const options = {
-			hostname: CANVAS_API_DOMAIN,
+			hostname: domain,
 			port: 443,
 			path: '/api/v1/users/self/profile',
 			method: 'GET',
 			headers: {
-				'Authorization': 'Bearer ' + CANVAS_API_TOKEN,
+				'Authorization': 'Bearer ' + token,
 			},
 		};
 		https.get(options, response => {
@@ -30,19 +28,19 @@ function getSelf() {
 	});
 }
 
-function getCourses(state) {
-	console.log('running getCourses => state: ' + state);
+function getCourses(token, domain, state) {
+	console.log('running getCourses');
 
 	const https = require('https');
 	return new Promise((resolve, reject) => {
 
 		const options = {
-			hostname: CANVAS_API_DOMAIN,
+			hostname: domain,
 			port: 443,
 			path: '/api/v1/courses?enrollment_state=' + state + '&per_page=100',
 			method: 'GET',
 			headers: {
-				'Authorization': 'Bearer ' + CANVAS_API_TOKEN,
+				'Authorization': 'Bearer ' + token,
 			},
 		};
 
@@ -62,17 +60,17 @@ function getCourses(state) {
 	});
 }
 
-function getCourseSummary(id) {
+function getCourseSummary(token, domain, id) {
 	console.log('running getCourseSummary');
 	const https = require('https');
 	return new Promise((resolve, reject) => {
 		const options = {
-			hostname: CANVAS_API_DOMAIN,
+			hostname: domain,
 			port: 443,
 			path: '/api/v1/courses/' + id + '/activity_stream/summary',
 			method: 'GET',
 			headers: {
-				'Authorization': 'Bearer ' + CANVAS_API_TOKEN,
+				'Authorization': 'Bearer ' + token,
 			},
 		};
 		console.log(' ' + options.path);
@@ -91,19 +89,19 @@ function getCourseSummary(id) {
 	});
 }
 
-function getAssignments(course_id, type) {
+function getAssignments(token, domain, course_id, type) {
 	console.log('running getAssignments => course_id: ' + course_id + ', type: ' + type + '&per_page=100');
 	const https = require ('https');
 
 	return new Promise((resolve, reject) => {
 		// only allow command to be used with course id specified as an argument
 		const options = {
-			hostname: CANVAS_API_DOMAIN,
+			hostname: domain,
 			port: 443,
 			path: '/api/v1/courses/' + course_id + '/assignments?order_by=due_at' + '&bucket=' + type + '&per_page=100',
 			method: 'GET',
 			headers: {
-				'Authorization': 'Bearer ' + CANVAS_API_TOKEN,
+				'Authorization': 'Bearer ' + token,
 			},
 		};
 
@@ -123,27 +121,27 @@ function getAssignments(course_id, type) {
 	});
 }
 
-function getTodo(id) {
+function getTodo(token, domain, id) {
 	console.log('running getTodo');
 	const https = require('https');
 	return new Promise((resolve, reject) => {
 		let options = {
-			hostname: CANVAS_API_DOMAIN,
+			hostname: domain,
 			port: 443,
 			path: '/api/v1/users/self/todo',
 			method: 'GET',
 			headers: {
-				'Authorization': 'Bearer ' + CANVAS_API_TOKEN,
+				'Authorization': 'Bearer ' + token,
 			},
 		};
 		if (id !== undefined) {
 			options = {
-				hostname: CANVAS_API_DOMAIN,
+				hostname: domain,
 				port: 443,
 				path: '/api/v1/courses/' + id + '/todo',
 				method: 'GET',
 				headers: {
-					'Authorization': 'Bearer ' + CANVAS_API_TOKEN,
+					'Authorization': 'Bearer ' + token,
 				},
 			};
 		}
@@ -163,28 +161,28 @@ function getTodo(id) {
 	});
 }
 
-function getActivityStream(state) {
+function getActivityStream(token, domain, state) {
 	console.log('running getActivityStream');
 	console.log('state : = > ' + state);
 	const https = require('https');
 	return new Promise((resolve, reject) => {
 		let options = {
-			hostname: CANVAS_API_DOMAIN,
+			hostname: domain,
 			port: 443,
 			path: '/api/v1/users/self/activity_stream',
 			method: 'GET',
 			headers: {
-				'Authorization': 'Bearer ' + CANVAS_API_TOKEN,
+				'Authorization': 'Bearer ' + token,
 			},
 		};
 		if (state) {
 			options = {
-				hostname: CANVAS_API_DOMAIN,
+				hostname: domain,
 				port: 443,
 				path: '/api/v1/courses?only_active_courses=' + state,
 				method: 'GET',
 				headers: {
-					'Authorization': 'Bearer ' + CANVAS_API_TOKEN,
+					'Authorization': 'Bearer ' + token,
 				},
 			};
 		}
