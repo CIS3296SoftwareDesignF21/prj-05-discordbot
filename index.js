@@ -1,8 +1,6 @@
 const { Client, Intents, MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const { blockQuote, bold } = require('@discordjs/builders')
-const wait = require('util').promisify(setTimeout);
 const commands = require('./commands/getAPIs');
-const { waitForDebugger } = require('inspector');
 require('dotenv').config();
 
 // read in value of discord bot token from the .env file
@@ -157,7 +155,7 @@ client.on('interactionCreate', async interaction => {
 						arrEmbeds.push(
 							new MessageEmbed()
 								.setTitle(result[obj]?.name || 'undefined')
-								.setDescription('ID '+ (result[obj]?.id || 'undefined'))
+								.setDescription('ID ' + (result[obj]?.id || 'undefined'))
 								.addField(
 									'Unreads',
 									blockQuote(
