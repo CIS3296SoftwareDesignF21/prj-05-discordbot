@@ -169,10 +169,10 @@ async function handle_command(interaction, canvas_auth) {
 							.then(response => JSON.parse(response))
 							.then(something => { return something });
 
-						let e = new MessageEmbed()
-							.setTitle(result[x]?.name || 'unauthorized')
-							.setDescription('ID ' + (result[x]?.id || 'NONE'))
 						if (todos[0] !== undefined) {
+							let e = new MessageEmbed()
+								.setTitle(result[x]?.name || 'unauthorized')
+								.setDescription('ID ' + (result[x]?.id || 'NONE'))
 							for (let i = 0; i < 3; i++) {
 								if (todos[i] !== undefined) {
 									e.addFields([
@@ -188,10 +188,9 @@ async function handle_command(interaction, canvas_auth) {
 									])
 								}
 							}
-						} else {
-							e.setFooter('There are no TODOS');
+							arrEmbeds.push(e);
 						}
-						arrEmbeds.push(e);
+
 					}
 					await interaction.editReply({ embeds: arrEmbeds, components: [] });
 				}
