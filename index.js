@@ -1,3 +1,4 @@
+
 const { Client, Intents, MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const { blockQuote, bold } = require('@discordjs/builders')
 const commands = require('./commands/getAPIs');
@@ -25,6 +26,7 @@ client.on('interactionCreate', async interaction => {
 	if (commandName === 'hello') {
 		await interaction.reply('Hello World!');
 	}
+
 	if (commandName === 'server') {
 		await interaction.reply({
 			content: `Server name: ${interaction.guild.name}\n`
@@ -32,6 +34,7 @@ client.on('interactionCreate', async interaction => {
 			ephemeral: true,
 		});
 	}
+
 	if (commandName === 'self') {
 		commands.getSelf().then((response) => {
 			const js = JSON.parse(response);
@@ -57,6 +60,7 @@ client.on('interactionCreate', async interaction => {
 				});
 			});
 	}
+
 	if (commandName === 'courses') {
 		const state = interaction.options.getString('state');
 		let embed = new MessageEmbed();
@@ -77,8 +81,8 @@ client.on('interactionCreate', async interaction => {
 						+ bold('\nStart at: \n') + ('' + result[obj].start_at).substring(0, 10)
 						+ bold('\nEnd at: \n') + ('' + result[obj].end_at).substring(0, 10)
 					),
-					true
-				)
+					true,
+				);
 			}
 			interaction.reply({
 				embeds: [
@@ -183,6 +187,59 @@ client.on('interactionCreate', async interaction => {
 			});
 		});
 	}
+  
+  if (commandName === 'assignments') {
+		const course_id = interaction.options.getString('course_id');
+		const type = interaction.options.getString('type');
+
+		commands.getAssignments(course_id, type).then(response => {
+			const reply = JSON.parse(response);
+			const embed = new MessageEmbed();
+			let i = 0;
+
+			// console.log(js);
+			for (const obj in reply) {
+				if (i % 2 == 0 && i != 0) {
+					// adds emtpy field
+					embed.addField('\u200B', '\u200B');
+				}
+
+				// counter for two courses per row
+				i++;
+
+				let isSubmitted = '';
+				if (reply[obj].has_submitted_submissions == true) {
+					isSubmitted = 'yes';
+				}
+				else {
+					isSubmitted = 'no';
+				}
+
+				embed.addField(
+					'' + reply[obj].name,
+					blockQuote(
+						bold('Assignment Type: ') + reply[obj].submission_types + '\n' +
+						bold('Submitted: ') + isSubmitted + '\n' +
+						bold('Due Date: ') + reply[obj].due_at + '\n' +
+						bold('Points Possible: ') + reply[obj].points_possible + '\n' +
+						bold('Link to Assignment: ') + reply[obj].html_url,
+					),
+					true,
+				);
+			}
+			interaction.reply({
+				embeds: [embed
+					.setColor('#7289da')
+					.setTitle('Your Assignments')],
+				ephemeral: false,
+			});
+		}).catch(error => {
+			interaction.reply({
+				content: 'Error => ' + error,
+				ephemeral: true,
+			});
+		});
+	}
 
 
 	/*
@@ -197,9 +254,3 @@ client.on('interactionCreate', async interaction => {
 		const mentionable = interaction.options.getMentionable('mentionable');
 	 example */
 });
-
-// logout of server after timeout
-/* setTimeout(function() {
-	console.log('destroyed');
-	client.destroy(DISCORD_BOT_TOKEN);
-}, 10000); */
