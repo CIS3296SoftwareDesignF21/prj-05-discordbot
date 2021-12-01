@@ -1,5 +1,7 @@
-const { Client, Intents, MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { Client, Intents, MessageEmbed, MessageActionRow, MessageButton, MessageAttachment, Message } = require('discord.js');
 const { blockQuote, bold } = require('@discordjs/builders');
+const { get_canvas_auth } = require('./database.js');
+const canvas = require('node-canvas-api');
 const commands = require('./commands/getAPIs');
 require('dotenv').config();
 
@@ -18,10 +20,35 @@ client.once('ready', () => {
 client.login(DISCORD_BOT_TOKEN);
 
 client.on('interactionCreate', async interaction => {
+	const { guildId } = interaction;
+
+	const canvas_auth = await get_canvas_auth(guildId).catch(console.dir);
+
+	await handle_command(interaction, canvas_auth);
+
+	/*
+		const string = interaction.options.getString('input');
+		const integer = interaction.options.getInteger('int');
+		const number = interaction.options.getNumber('num');
+		const boolean = interaction.options.getBoolean('choice');
+		const user = interaction.options.getUser('target');
+		const member = interaction.options.getMember('target');
+		const channel = interaction.options.getChannel('destination');
+		const role = interaction.options.getRole('muted');
+		const mentionable = interaction.options.getMentionable('mentionable');
+	 example */
+});
+
+async function handle_command(interaction, canvas_auth) {
 	if (!interaction.isCommand()) return;
+
+	const { canvas_api_token, canvas_api_domain } = canvas_auth;
 
 	const { commandName } = interaction;
 
+	if (commandName === 'canvas_init') {
+		await interaction.reply(`https://canvasdiscordbot.herokuapp.com/guild/${interaction.guildId}`)
+	}
 	if (commandName === 'hello') {
 		await interaction.reply('Hello World!');
 	}
@@ -35,35 +62,54 @@ client.on('interactionCreate', async interaction => {
 	}
 
 	if (commandName === 'self') {
-		commands.getSelf().then((response) => {
-			const js = JSON.parse(response);
-			console.log(js);
+			commands.getSelf(canvas_auth.canvas_api_token, canvas_auth.canvas_api_domain).then((res) => {
+			const json = JSON.parse(res);
+			console.log(json);
 			interaction.reply({
 				embeds: [new MessageEmbed()
 					.setColor('#0099ff')
-					.setTitle(js.name)
+					.setTitle(json.name)
 					.setDescription(
-						'Canvas User ID => ' + js.id + '\n'
-						+ 'TUID => ' + js.integration_id + '\n'
-						+ 'Email => ' + js.primary_email + '\n'
-						+ 'User Bio => "' + js.bio + '"\n')
-					.setThumbnail(js.avatar_url)
+						'Canvas User ID => ' + json.id + '\n'
+						+ 'TUID => ' + json.integration_id + '\n'
+						+ 'Email => ' + json.primary_email + '\n'
+						+ 'User Bio => "' + json.bio + '"\n')
+					.setThumbnail(json.avatar_url)
 					.setTimestamp()],
 				ephemeral: true,
 			});
 		})
-			.catch(error => {
-				interaction.reply({
-					content: error,
-					ephemeral: true,
-				});
+		.catch(error => {
+				console.log(error);
+				interaction.reply(error);
+		});
+	}
+	if (commandName === 'announcements') {
+		const course_id = interaction.options.getString('course_id');
+		canvas.getAnnouncements(canvas_api_token, canvas_api_domain, course_id).then(res => {
+			let arrEmbeds = [];
+			var numToDisplay = 10 <= res.length ? 10 : res.length;
+			for(var i = numToDisplay - 1; i >= 0; i--) {
+				console.log(res[i]);
+				arrEmbeds.push(new MessageEmbed()
+					.setTitle(res[i].title + '	' + '\nID => ' + res[i].id)
+					.setTimestamp(new Date(res[i].posted_at))
+					.setAuthor(res[i].user_name)
+					.setURL('http://' + canvas_api_domain + `/courses/${course_id}/discussion_topics/${res[i].id}`)
+				);
+			}
+			interaction.reply({
+				content: 'Announcements',
+				embeds: arrEmbeds,
+				ephemeral: true,
 			});
+		});
 	}
 
 	if (commandName === 'courses') {
 		const state = interaction.options.getString('state');
 		const embed = new MessageEmbed();
-		commands.getCourses(state).then(response => {
+		commands.getCourses(canvas_api_token, canvas_api_domain, state).then(response => {
 			const result = JSON.parse(response);
 			let i = 0;
 			for (const obj in result) {
@@ -119,7 +165,7 @@ client.on('interactionCreate', async interaction => {
 							.then(response => JSON.parse(response))
 							.then(something => { return something }); */
 						//get specific course todos
-						const todos = await commands.getTodo(result[x].id)
+						const todos = await commands.getTodo(canvas_api_token, canvas_api_domain, result[x].id)
 							.then(response => JSON.parse(response))
 							.then(something => { return something });
 
@@ -154,7 +200,7 @@ client.on('interactionCreate', async interaction => {
 					let arrEmbeds = [];
 					for (var x = 0; x < result.length && x < 10; x++) {
 						//get specific course summary
-						const sum = await commands.getCourseSummary(result[x].id)
+						const sum = await commands.getCourseSummary(canvas_api_token, canvas_api_domain, result[x].id)
 							.then(response => JSON.parse(response))
 							.then(something => { return something });
 						arrEmbeds.push(
@@ -193,7 +239,7 @@ client.on('interactionCreate', async interaction => {
 		const course_id = interaction.options.getString('course_id');
 		const type = interaction.options.getString('type');
 
-		commands.getAssignments(course_id, type).then(response => {
+		commands.getAssignments(canvas_api_token, canvas_api_domain, course_id, type).then(response => {
 			const reply = JSON.parse(response);
 			const embed = new MessageEmbed();
 			let i = 0;
@@ -254,4 +300,4 @@ client.on('interactionCreate', async interaction => {
 		const role = interaction.options.getRole('muted');
 		const mentionable = interaction.options.getMentionable('mentionable');
 	 example */
-});
+}
