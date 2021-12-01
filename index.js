@@ -113,19 +113,19 @@ client.on('interactionCreate', async interaction => {
 				//TODO button
 				if (i.customId === 'todo') {
 					let arrEmbeds = [];
-					for (var obj in result) {
+					for (var x = 0; x < result.length && x < 10; x++) {
 						//get specific course summary
 						/* const sum = await commands.getCourseSummary(result[obj].id)
 							.then(response => JSON.parse(response))
 							.then(something => { return something }); */
 						//get specific course todos
-						const todos = await commands.getTodo(result[obj].id)
+						const todos = await commands.getTodo(result[x].id)
 							.then(response => JSON.parse(response))
 							.then(something => { return something });
 
 						let e = new MessageEmbed()
-							.setTitle(result[obj]?.name || 'unauthorized')
-							.setDescription('ID ' + (result[obj]?.id || 'NONE'))
+							.setTitle(result[x]?.name || 'unauthorized')
+							.setDescription('ID ' + (result[x]?.id || 'NONE'))
 						if (todos[0] !== undefined) {
 							for (let i = 0; i < 3; i++) {
 								if (todos[i] !== undefined) {
@@ -152,15 +152,15 @@ client.on('interactionCreate', async interaction => {
 				//activity summary button
 				if (i.customId === 'sum') {
 					let arrEmbeds = [];
-					for (var obj in result) {
+					for (var x = 0; x < result.length && x < 10; x++) {
 						//get specific course summary
-						const sum = await commands.getCourseSummary(result[obj].id)
+						const sum = await commands.getCourseSummary(result[x].id)
 							.then(response => JSON.parse(response))
 							.then(something => { return something });
 						arrEmbeds.push(
 							new MessageEmbed()
-								.setTitle(result[obj]?.name || 'undefined')
-								.setDescription('ID ' + (result[obj]?.id || 'undefined'))
+								.setTitle(result[x]?.name || 'undefined')
+								.setDescription('ID ' + (result[x]?.id || 'undefined'))
 								.addField(
 									'Unreads',
 									blockQuote(
