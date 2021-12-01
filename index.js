@@ -24,7 +24,11 @@ client.on('interactionCreate', async interaction => {
 
 	const canvas_auth = await get_canvas_auth(guildId).catch(console.dir);
 
-	await handle_command(interaction, canvas_auth);
+	try {
+		await handle_command(interaction, canvas_auth);
+	} catch(error) {
+		console.log(error);
+	}
 
 	/*
 		const string = interaction.options.getString('input');
