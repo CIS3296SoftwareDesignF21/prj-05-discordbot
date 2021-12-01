@@ -90,7 +90,7 @@ client.on('interactionCreate', async interaction => {
 					embed
 						.setColor('#FFC0CB')
 						.setTitle('Your Courses')
-						.setFooter(bold('You have 10s before this window expires'))
+						.setFooter(bold('You have 2 mins before this window expires'))
 				],
 				components: [new MessageActionRow()
 					.addComponents(
@@ -108,7 +108,7 @@ client.on('interactionCreate', async interaction => {
 			});
 			//collector for buttons
 			const filter = i => i.customId === 'todo' || i.customId === 'sum';
-			const collector = interaction.channel.createMessageComponentCollector({ filter, time: 10000 });
+			const collector = interaction.channel.createMessageComponentCollector({ filter, time: 2 * 60 * 1000 });
 			collector.on('collect', async i => {
 				//TODO button
 				if (i.customId === 'todo') {
