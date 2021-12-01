@@ -9,20 +9,23 @@ const GUILD_ID = process.env.GUILD_ID;
 const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
 
 const commands = [
-	new SlashCommandBuilder().setName('hello').setDescription('Replies with Hello World'),
+	new SlashCommandBuilder().setName('hello').setDescription('Replies with Hello World!'),
 	new SlashCommandBuilder().setName('server').setDescription('Replies with server info!'),
-	new SlashCommandBuilder().setName('self').setDescription('Get user info'),
-	new SlashCommandBuilder().setName('canvas_init').setDescription('Landing page for authenticating canvas!'),
-	new SlashCommandBuilder().setName('announcements').setDescription('Display announcements for class id!')
-		.addStringOption(option => option.setName('course_id').setDescription('Enter the class course_id')),
-	new SlashCommandBuilder().setName('courses').setDescription('Get all courses info. Optional True/False: active -> get active courses info')
+	new SlashCommandBuilder().setName('self').setDescription('Get user info about yourself from Canvas!'),
+	new SlashCommandBuilder().setName('canvas_init').setDescription('Landing page for authenticating Canvas!'),
+	new SlashCommandBuilder().setName('announcements').setDescription('Display announcements for an inputted class_id!')
+		.addStringOption(option =>
+			option.setName('course_id')
+				.setDescription('Enter the course_id you want to see announcemtns for')
+				.setRequired(true)),
+	new SlashCommandBuilder().setName('courses').setDescription('Get information about active or completed course enrollments!')
 		.addStringOption(option =>
 			option.setName('state')
 				.setDescription('Enter a course state: ')
 				.addChoice('active enrollments', 'active')
 				.addChoice('past enrollments', 'completed')
 				.setRequired(true)),
-	new SlashCommandBuilder().setName('assignments').setDescription('Get all assignments for a specific course [in test]')
+	new SlashCommandBuilder().setName('assignments').setDescription('Get all assignments for a specific course_id!')
 		.addStringOption(option => option.setName('course_id').setDescription('Enter a state: course_id').setRequired(true))
 		.addStringOption(option =>
 			option.setName('type')
