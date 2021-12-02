@@ -8,5 +8,8 @@ Tasks from Trello that each team member has accomplished this week (one coding t
 - Created "professional readme" and moved previous readme.md to weekly_readme folder. 
 
 #### Jacky Chen He
+- Improved /courses command with two new buttons that show courses' todo list and unreads.
+- Implemented APIs: getTodo, getActivityStream, getCourseSummary.
+- Removed some finished testing codes.
 
 #### Yuri Yakymiv
