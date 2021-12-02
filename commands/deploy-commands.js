@@ -1,8 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
-// const { clientId, guildId, token } = require('./config.json');
-// updated require command to get .env file one directory above current [AS 11/17/21]
+
 require('dotenv').config({ path:'../.env' });
 const CLIENT_ID = process.env.CLIENT_ID;
 const GUILD_ID = process.env.GUILD_ID;
@@ -35,14 +34,6 @@ const commands = [
 				.addChoice('unsubmitted assignments', 'unsubmitted')
 				.addChoice('future assignments', 'future')
 				.setRequired(true)),
-
-	// .addIntegerOption(option => option.setName('int').setDescription('Enter an integer'))
-	// .addNumberOption(option => option.setName('num').setDescription('Enter a number'))
-	// .addBooleanOption(option => option.setName('state').setDescription('Select a state'))
-	// .addUserOption(option => option.setName('target').setDescription('Select a user'))
-	// .addChannelOption(option => option.setName('destination').setDescription('Select a channel'))
-	// .addRoleOption(option => option.setName('muted').setDescription('Select a role'))
-	// .addMentionableOption(option => option.setName('mentionable').setDescription('Mention something')),
 ]
 	.map(command => command.toJSON());
 

@@ -1,4 +1,5 @@
-const { Client, Intents, MessageEmbed, MessageActionRow, MessageButton, MessageAttachment, Message } = require('discord.js');
+/* eslint-disable no-shadow */
+const { Client, Intents, MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const { blockQuote, bold } = require('@discordjs/builders');
 const { get_canvas_auth } = require('./database.js');
 const canvas = require('node-canvas-api');
@@ -30,17 +31,6 @@ client.on('interactionCreate', async interaction => {
 		console.log(error);
 	}
 
-	/*
-		const string = interaction.options.getString('input');
-		const integer = interaction.options.getInteger('int');
-		const number = interaction.options.getNumber('num');
-		const boolean = interaction.options.getBoolean('choice');
-		const user = interaction.options.getUser('target');
-		const member = interaction.options.getMember('target');
-		const channel = interaction.options.getChannel('destination');
-		const role = interaction.options.getRole('muted');
-		const mentionable = interaction.options.getMentionable('mentionable');
-	 example */
 });
 
 async function handle_command(interaction, canvas_auth) {
@@ -51,7 +41,7 @@ async function handle_command(interaction, canvas_auth) {
 	const { commandName } = interaction;
 
 	if (commandName === 'canvas_init') {
-		await interaction.reply(`https://canvasdiscordbot.herokuapp.com/guild/${interaction.guildId}`)
+		await interaction.reply(`https://canvasdiscordbot.herokuapp.com/guild/${interaction.guildId}`);
 	}
 	if (commandName === 'hello') {
 		await interaction.reply('Hello World!');
@@ -66,9 +56,9 @@ async function handle_command(interaction, canvas_auth) {
 	}
 
 	if (commandName === 'self') {
-			commands.getSelf(canvas_auth.canvas_api_token, canvas_auth.canvas_api_domain).then((res) => {
+		commands.getSelf(canvas_auth.canvas_api_token, canvas_auth.canvas_api_domain).then((res) => {
 			const json = JSON.parse(res);
-			console.log(json);
+			// console.log(json);
 			interaction.reply({
 				embeds: [new MessageEmbed()
 					.setColor('#0099ff')
@@ -83,23 +73,23 @@ async function handle_command(interaction, canvas_auth) {
 				ephemeral: true,
 			});
 		})
-		.catch(error => {
+			.catch(error => {
 				console.log(error);
 				interaction.reply(error);
-		});
+			});
 	}
 	if (commandName === 'announcements') {
 		const course_id = interaction.options.getString('course_id');
 		canvas.getAnnouncements(canvas_api_token, canvas_api_domain, course_id).then(res => {
-			let arrEmbeds = [];
-			var numToDisplay = 10 <= res.length ? 10 : res.length;
-			for(var i = numToDisplay - 1; i >= 0; i--) {
-				console.log(res[i]);
+			const arrEmbeds = [];
+			const numToDisplay = res.length >= 10 ? 10 : res.length;
+			for (let i = numToDisplay - 1; i >= 0; i--) {
+				// console.log(res[i]);
 				arrEmbeds.push(new MessageEmbed()
 					.setTitle(res[i].title + '	' + '\nID => ' + res[i].id)
 					.setTimestamp(new Date(res[i].posted_at))
 					.setAuthor(res[i].user_name)
-					.setURL('http://' + canvas_api_domain + `/courses/${course_id}/discussion_topics/${res[i].id}`)
+					.setURL('http://' + canvas_api_domain + `/courses/${course_id}/discussion_topics/${res[i].id}`),
 				);
 			}
 			interaction.reply({
@@ -140,43 +130,43 @@ async function handle_command(interaction, canvas_auth) {
 					embed
 						.setColor('#FFC0CB')
 						.setTitle('Your Courses')
-						.setFooter(bold('You have 2 mins before this window expires'))
+						.setFooter(bold('You have 2 mins before this window expires')),
 				],
 				components: [new MessageActionRow()
 					.addComponents(
 						new MessageButton()
 							.setCustomId('sum')
 							.setLabel('Activity Summary')
-							.setStyle('PRIMARY')
+							.setStyle('PRIMARY'),
 					).addComponents(
 						new MessageButton()
 							.setCustomId('todo')
 							.setLabel('TODOS')
 							.setStyle('DANGER'),
-					),],
+					)],
 				ephemeral: true,
 			});
-			//collector for buttons
+			// collector for buttons
 			const filter = i => i.customId === 'todo' || i.customId === 'sum';
 			const collector = interaction.channel.createMessageComponentCollector({ filter, time: 2 * 60 * 1000 });
 			collector.on('collect', async i => {
-				//TODO button
+				// TODO button
 				if (i.customId === 'todo') {
-					let arrEmbeds = [];
-					for (var x = 0; x < result.length && x < 10; x++) {
-						//get specific course summary
+					const arrEmbeds = [];
+					for (let x = 0; x < result.length && x < 10; x++) {
+						// get specific course summary
 						/* const sum = await commands.getCourseSummary(result[obj].id)
 							.then(response => JSON.parse(response))
 							.then(something => { return something }); */
-						//get specific course todos
+						// get specific course todos
 						const todos = await commands.getTodo(canvas_api_token, canvas_api_domain, result[x].id)
 							.then(response => JSON.parse(response))
-							.then(something => { return something });
+							.then(something => { return something; });
 
 						if (todos[0] !== undefined) {
-							let e = new MessageEmbed()
+							const e = new MessageEmbed()
 								.setTitle(result[x]?.name || 'unauthorized')
-								.setDescription('ID ' + (result[x]?.id || 'NONE'))
+								.setDescription('ID ' + (result[x]?.id || 'NONE'));
 							for (let i = 0; i < 3; i++) {
 								if (todos[i] !== undefined) {
 									e.addFields([
@@ -186,10 +176,10 @@ async function handle_command(interaction, canvas_auth) {
 												bold('Due at: ') + (todos[i]?.assignment.due_at || 'None')
 												+ bold('\nSubmission Types: ') + (todos[i]?.assignment.submission_types[0] || 'None')
 												+ bold('\nPoints: ') + (todos[i]?.assignment.points_possible || 'None')
-												+ bold('\nURL: ') + (todos[i]?.assignment.html_url || 'None')
-											)
-										}
-									])
+												+ bold('\nURL: ') + (todos[i]?.assignment.html_url || 'None'),
+											),
+										},
+									]);
 								}
 							}
 							arrEmbeds.push(e);
@@ -198,14 +188,14 @@ async function handle_command(interaction, canvas_auth) {
 					}
 					await interaction.editReply({ embeds: arrEmbeds, components: [] });
 				}
-				//activity summary button
+				// activity summary button
 				if (i.customId === 'sum') {
-					let arrEmbeds = [];
-					for (var x = 0; x < result.length && x < 10; x++) {
-						//get specific course summary
+					const arrEmbeds = [];
+					for (let x = 0; x < result.length && x < 10; x++) {
+						// get specific course summary
 						const sum = await commands.getCourseSummary(canvas_api_token, canvas_api_domain, result[x].id)
 							.then(response => JSON.parse(response))
-							.then(something => { return something });
+							.then(something => { return something; });
 						arrEmbeds.push(
 							new MessageEmbed()
 								.setTitle(result[x]?.name || 'undefined')
@@ -216,9 +206,9 @@ async function handle_command(interaction, canvas_auth) {
 										bold('Announcement: ') + (sum[0]?.unread_count || 'none')
 										+ bold('\nDiscussion Topic: ') + (sum[1]?.unread_count || 'none')
 										+ bold('\nMessage: ') + (sum[2]?.unread_count || 'none')
-										+ bold('\nSubmission: ') + (sum[3]?.unread_count || 'none')
-									)
-								)
+										+ bold('\nSubmission: ') + (sum[3]?.unread_count || 'none'),
+									),
+								),
 						);
 					}
 					await interaction.editReply({ embeds: arrEmbeds, components: [] });
@@ -226,7 +216,7 @@ async function handle_command(interaction, canvas_auth) {
 			});
 			collector.on('end', collected => {
 				if (collected.size === 0) {
-					interaction.editReply({ embeds: [embed.setFooter(bold("THIS WINDOW HAS EXPIRED"))] })
+					interaction.editReply({ embeds: [embed.setFooter(bold('THIS WINDOW HAS EXPIRED'))] });
 				}
 			});
 
@@ -281,7 +271,7 @@ async function handle_command(interaction, canvas_auth) {
 				embeds: [embed
 					.setColor('#7289da')
 					.setTitle('Your Assignments')],
-				ephemeral: false,
+				ephemeral: true,
 			});
 		}).catch(error => {
 			interaction.reply({
@@ -290,17 +280,4 @@ async function handle_command(interaction, canvas_auth) {
 			});
 		});
 	}
-
-
-	/*
-		const string = interaction.options.getString('input');
-		const integer = interaction.options.getInteger('int');
-		const number = interaction.options.getNumber('num');
-		const boolean = interaction.options.getBoolean('choice');
-		const user = interaction.options.getUser('target');
-		const member = interaction.options.getMember('target');
-		const channel = interaction.options.getChannel('destination');
-		const role = interaction.options.getRole('muted');
-		const mentionable = interaction.options.getMentionable('mentionable');
-	 example */
 }

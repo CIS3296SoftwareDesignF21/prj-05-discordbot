@@ -202,7 +202,4 @@ function getActivityStream(token, domain, state) {
 	});
 }
 
-/* getCourses("active").then(response => console.log(JSON.parse(response)))
-	.catch(error => console.log(error)) */
-
 module.exports = { getSelf, getCourses, getCourseSummary, getTodo, getAssignments, getActivityStream };
